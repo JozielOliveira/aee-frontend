@@ -3,7 +3,8 @@ import { Field, ErrorMessage } from 'formik'
 import { FormGroup, Row, Col, Button } from "reactstrap"
 
 import { Form } from './form'
-import { Description, Label, Input } from './components'
+import { Description, Label } from './components'
+import { Input } from '..'
 
 import { getInitialValue, getValidationSchema } from './utils'
 import { QuestionType } from '../../types'

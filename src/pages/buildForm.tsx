@@ -1,5 +1,5 @@
-import React from 'react'
-import { Container, Card, CardBody } from "reactstrap"
+import React from "react";
+import { Container, Card, CardBody } from "reactstrap";
 
 // core components
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
@@ -19,16 +19,12 @@ export default function BuildForm() {
           onSubmit={(params: any) => console.log(params)}
         >
           <Container className="mb-5">
-            
             <Card className="shadow">
-              <CardBody>
-                
-              </CardBody>
+              <CardBody></CardBody>
             </Card>
           </Container>
-
         </Form>
       </main>
     </>
-  )
+  );
 }

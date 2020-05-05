@@ -1,6 +1,5 @@
-import React from 'react'
+import React from "react";
 
-export const Description = (props: { value: string }) =>
-  <p className="description">
-    {props.value}
-  </p>
+export const Description = (props: { value: string }) => (
+  <p className="description">{props.value}</p>
+);

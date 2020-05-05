@@ -37,22 +37,22 @@ import Download from "./IndexSections/Download.js";
 //     description: '',
 //     questions: [
 //       {
-//         id: 1, 
+//         id: 1,
 //         name: 'name',
-//         type: 'text', 
-//         label: '', 
-//         description: 'Com que idade controlou a urina de dia?', 
-//         placeholder: 'Nome...', 
+//         type: 'text',
+//         label: '',
+//         description: 'Com que idade controlou a urina de dia?',
+//         placeholder: 'Nome...',
 //         defaultValue: 'Joziel',
 //         validations: ['string','email', 'required']
 //       },
 //       {
-//         id: 2, 
+//         id: 2,
 //         name: 'last_name',
-//         type: 'text', 
-//         label: '', 
-//         description: 'Como foi a gestação?', 
-//         placeholder: 'Sobrenome...', 
+//         type: 'text',
+//         label: '',
+//         description: 'Como foi a gestação?',
+//         placeholder: 'Sobrenome...',
 //         defaultValue: ''
 //       }
 //     ]
@@ -63,12 +63,12 @@ import Download from "./IndexSections/Download.js";
 //     description: '',
 //     questions: [
 //       {
-//         id: 1, 
+//         id: 1,
 //         name: 'phone',
-//         type: 'text', 
-//         label: 'Telefone', 
-//         description: '', 
-//         placeholder: 'Telefone...', 
+//         type: 'text',
+//         label: 'Telefone',
+//         description: '',
+//         placeholder: 'Telefone...',
 //         defaultValue: ''
 //       }
 //     ]
@@ -79,7 +79,7 @@ import Download from "./IndexSections/Download.js";
 //   title: 'Anamnese',
 //   steps: steps
 // }
-type MyDocument = (typeof document) & { scrollingElement: any }
+type MyDocument = typeof document & { scrollingElement: any };
 
 class Index extends React.Component {
   componentDidMount() {
@@ -130,6 +130,5 @@ class Index extends React.Component {
     );
   }
 }
-
 
 export default Index;

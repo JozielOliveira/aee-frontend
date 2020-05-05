@@ -1,4 +1,4 @@
-export type ValidationType = 'required' | 'email'
+export type ValidationType = "required" | "email";
 
 export interface QuestionType {
   id: string;
@@ -13,13 +13,13 @@ export interface QuestionType {
 
 export interface StepType {
   id: string;
-  questions: QuestionType[]
+  questions: QuestionType[];
 }
 
 export interface StepResponseType {
   step_id: string;
   quiz_id: string;
-  response: QuestionType[]
+  response: QuestionType[];
 }
 
 export interface QuizType {

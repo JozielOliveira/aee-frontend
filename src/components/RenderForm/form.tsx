@@ -1,18 +1,16 @@
-import React from 'react'
-import { Formik, Form as FormComponent, FormikConfig } from 'formik'
+import React from "react";
+import { Formik, Form as FormComponent, FormikConfig } from "formik";
 
 type FormProps<T> = FormikConfig<T> & {
-  children: any,
-}
+  children: any;
+};
 
-export const Form = ({ children, ...props}: FormProps<any>) => {
+export const Form = ({ children, ...props }: FormProps<any>) => {
   return (
     <Formik {...props}>
       <FormComponent>
-        <>
-          {children}
-        </> 
+        <>{children}</>
       </FormComponent>
     </Formik>
-  )
-}
+  );
+};

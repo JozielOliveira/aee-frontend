@@ -1,6 +1,6 @@
 import React from "react";
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useQuery } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
 
 // core components
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
@@ -29,24 +29,23 @@ const QUIZ = gql`
   }
 `;
 
-
-function FormBuild () {
+function FormBuild() {
   const { loading, error, data } = useQuery(QUIZ);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-  
-  console.log(data)
+
+  console.log(data);
 
   return (
     <>
       <DemoNavbar />
       <main>
         <Hero />
-        <Form quiz={data.quiz}/>
+        <Form quiz={data.quiz} />
       </main>
     </>
   );
 }
 
-export default FormBuild
+export default FormBuild;
