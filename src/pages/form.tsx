@@ -3,11 +3,10 @@ import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
+import { DemoNavbar, RenderForm } from "components";
 
 // index page sections
 import Hero from "../views/IndexSections/Hero.js";
-import Form from "../components/RenderForm";
 
 const QUIZ = gql`
   {
@@ -42,7 +41,7 @@ function FormBuild() {
       <DemoNavbar />
       <main>
         <Hero />
-        <Form quiz={data.quiz} />
+        <RenderForm quiz={data.quiz} />
       </main>
     </>
   );

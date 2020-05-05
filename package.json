@@ -6,7 +6,7 @@
   "author": "Joziel",
   "license": "MIT",
   "scripts": {
-    "start": "tsc react-scripts start",
+    "start": "tsc && react-scripts start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "type-check": "tsc",

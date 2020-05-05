@@ -1,1 +1,1 @@
-export { default as DemoNavbar } from './DemoNavbar.js'
+export { default as DemoNavbar } from "./DemoNavbar";

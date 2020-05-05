@@ -4,8 +4,7 @@ import React from "react";
 import { Container, Row } from "reactstrap";
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import CardsFooter from "components/Footers/CardsFooter.js";
+import { DemoNavbar, CardFooter } from "components";
 
 // index page sections
 import Hero from "./IndexSections/Hero.js";
@@ -125,7 +124,7 @@ class Index extends React.Component {
           <Login />
           <Download />
         </main>
-        <CardsFooter />
+        <CardFooter />
       </>
     );
   }

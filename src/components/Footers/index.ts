@@ -1,2 +1,2 @@
-export { default as CardFooter } from "./CardsFooter.js";
-export { default as SimpleFooter } from "./SimpleFooter.js";
+export { default as CardFooter } from "./CardsFooter";
+export { default as SimpleFooter } from "./SimpleFooter";
