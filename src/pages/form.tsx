@@ -22,6 +22,9 @@ const QUIZ = gql`
           label
           placeholder
           description
+          validations {
+            value
+          }
         }
       }
     }

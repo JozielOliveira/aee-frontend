@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { message } from "./constants";
-import { QuestionType } from "../../types";
+import { QuestionType } from "types";
 
 export const getInitialValue = (questions: QuestionType[]) => {
   const values: any = {};
@@ -15,11 +15,25 @@ export const getValidationSchema = (question: QuestionType[]) => {
 
   question.forEach((question) => {
     if (question.validations?.length) {
-      schema[question.name] = yup;
+      switch (question.type) {
+        case 'text':
+          schema[question.name] = yup.string();
+          break;
+        case 'boolean':
+          schema[question.name] = yup.string();
+          break;
+        case 'options':
+          schema[question.name] = yup.string();
+          break;
+        default:
+          schema[question.name] = yup[question.type]();
+      }
 
       question.validations.forEach((validation, index) => {
-        schema[question.name] = schema[question.name][validation](
-          index && message[validation](question.label)
+        const messageError = message[validation.value](question.label);
+
+        schema[question.name] = schema[question.name][validation.value](
+          messageError
         );
       });
     }

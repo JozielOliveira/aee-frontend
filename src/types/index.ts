@@ -1,14 +1,19 @@
-export type ValidationType = "required" | "email";
+import { InputType } from "components";
+
+export type ValidationType = {
+  value: "required" | "email";
+};
 
 export interface QuestionType {
   id: string;
   name: string;
-  type: string;
+  type: InputType;
   label?: string;
   placeholder?: string;
   description?: string;
   defaultValue?: string;
   validations?: ValidationType[];
+  value?: any;
 }
 
 export interface StepType {

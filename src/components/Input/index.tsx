@@ -1,43 +1,56 @@
 import React from "react";
-import {
-  Input as InputBase,
-  InputProps as InputPropsReactStrap,
-} from "reactstrap";
-import { FieldProps } from "formik";
+import { InputProps as InputPropsReactStrap } from "reactstrap";
+import { Field, FieldProps } from "formik";
+
+import { QuestionType } from "types";
+import { FieldBoolean, FieldInput, FieldOptions } from "./components";
 
 export type FieldFormki = InputPropsReactStrap & FieldProps;
 
+export type Option = {
+  label: string;
+  disabled?: boolean;
+};
+
+export type FieldOptionsProps = FieldFormki & {
+  options: Option[];
+};
+
 const TypesInput = {
-  text: ({ field, ...props }: FieldFormki) => (
-    <InputBase type="text" {...field} {...props} />
-  ),
-  number: ({ field, ...props }: FieldFormki) => (
-    <InputBase type="number" {...field} {...props} />
-  ),
-  boolean: ({ field, ...props }: FieldFormki) => (
-    <label className="custom-toggle">
-      <input
-        type="checkbox"
-        checked={Boolean(field.value)}
-        {...field}
-        {...props}
-      />
-      <span className="custom-toggle-slider rounded-circle" />
-    </label>
-  ),
+  text: (props: FieldFormki) => <FieldInput type="text" {...props} />,
+  number: (props: FieldFormki) => <FieldInput type="number" {...props} />,
+  boolean: (props: FieldFormki) => <FieldBoolean {...props} />,
   // Next version
   // 'checklist': (props) => {},
-  // 'options': (props) => {},
+  options: (props: FieldOptionsProps) => <FieldOptions {...props} />,
   // 'file': (props) => {},
 };
 
 export type InputType = keyof typeof TypesInput;
 
-export type InputProps = FieldFormki & {
+export type InputProps = QuestionType & {
   type: InputType;
+  disabled?: boolean;
+  options?: Option[];
 };
 
-export const Input = ({ type, ...props }: InputProps) => {
+export const Label = (props: { value: string }) => (
+  <div className="mb-3">
+    <small className="text-uppercase font-weight-bold">{props.value}</small>
+  </div>
+);
+
+export const Description = (props: { value: string }) => (
+  <p className="description">{props.value}</p>
+);
+
+export const Input = ({ type, label, description, ...props }: InputProps) => {
   const InputCustom = TypesInput[type];
-  return <InputCustom {...props} />;
+  return (
+    <>
+      {label && <Label value={label} />}
+      {description && <Description value={description} />}
+      <Field component={InputCustom} {...props} />
+    </>
+  );
 };
