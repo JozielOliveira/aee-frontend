@@ -12,7 +12,7 @@ export const RadioButton = ({
     <div className="custom-control custom-radio mb-3">
       <input
         name={name}
-        id={id}
+        id={`${name}-${id}`}
         type="radio"
         value={id} // could be something else for output?
         checked={id === value}
@@ -21,7 +21,7 @@ export const RadioButton = ({
         className="custom-control-input"
         {...props}
       />
-      <label className="custom-control-label" htmlFor={id}>{label}</label>
+      <label className="custom-control-label" htmlFor={`${name}-${id}`}>{label}</label>
     </div>
   );
 };

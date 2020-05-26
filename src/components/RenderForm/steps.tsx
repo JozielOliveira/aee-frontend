@@ -3,7 +3,7 @@ import { Row, Col, Button } from "reactstrap";
 
 import { Form, Input } from "components";
 
-import { getInitialValue, getValidationSchema } from "./utils";
+import { getInitialValue, getValidationSchema } from "../utils";
 import { QuestionType } from "types";
 
 type StepsProps = {

@@ -2,7 +2,7 @@ import React from "react";
 import { InputProps as InputPropsReactStrap } from "reactstrap";
 import { Field, FieldProps } from "formik";
 
-import { QuestionType } from "types";
+import { QuestionType, InputTypeKey } from "types";
 import { FieldBoolean, FieldInput, FieldOptions } from "./components";
 
 export type FieldFormki = InputPropsReactStrap & FieldProps;
@@ -20,16 +20,13 @@ const TypesInput = {
   text: (props: FieldFormki) => <FieldInput type="text" {...props} />,
   number: (props: FieldFormki) => <FieldInput type="number" {...props} />,
   boolean: (props: FieldFormki) => <FieldBoolean {...props} />,
-  // Next version
-  // 'checklist': (props) => {},
   options: (props: FieldOptionsProps) => <FieldOptions {...props} />,
-  // 'file': (props) => {},
+  // Next version
+  checklist: () => { },
+  file: () => { },
 };
 
-export type InputType = keyof typeof TypesInput;
-
 export type InputProps = QuestionType & {
-  type: InputType;
   disabled?: boolean;
   options?: Option[];
 };

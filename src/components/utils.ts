@@ -15,19 +15,10 @@ export const getValidationSchema = (question: QuestionType[]) => {
 
   question.forEach((question) => {
     if (question.validations?.length) {
-      switch (question.type) {
-        case 'text':
-          schema[question.name] = yup.string();
-          break;
-        case 'boolean':
-          schema[question.name] = yup.string();
-          break;
-        case 'options':
-          schema[question.name] = yup.string();
-          break;
-        default:
-          schema[question.name] = yup[question.type]();
-      }
+      if (question.type === 'number')
+        schema[question.name] = yup.number();
+      else
+        schema[question.name] = yup.string();
 
       question.validations.forEach((validation, index) => {
         const messageError = message[validation.value](question.label);
