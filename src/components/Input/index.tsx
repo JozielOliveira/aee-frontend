@@ -2,7 +2,7 @@ import React from "react";
 import { InputProps as InputPropsReactStrap } from "reactstrap";
 import { Field, FieldProps } from "formik";
 
-import { QuestionType, InputTypeKey } from "types";
+import { QuestionType } from "types";
 import { FieldBoolean, FieldInput, FieldOptions } from "./components";
 
 export type FieldFormki = InputPropsReactStrap & FieldProps;

@@ -7,26 +7,30 @@ import { Container, Card, CardBody, Button } from "reactstrap";
 import { BuilderQuestions, Input } from "..";
 import { message } from "../constants";
 import { BuilderQuizProps } from 'types';
+import { useCreateQuiz } from "services";
 
-export const BuilderQuiz = ({ onSubmit, initialValues }: { onSubmit(params: BuilderQuizProps): void, initialValues: BuilderQuizProps }) => {
-  const schema = Yup.object().shape({
-    quiz_title: Yup.string()
-      .min(3, 'Deve possuir no mínimo 3 caractéres')
-      .required(message.required('Titulo do fomulário')),
-    questions: Yup.array()
-      .of(
-        Yup.object().shape({
-          question_title: Yup.string()
-            .min(4, 'Deve possuir no mínimo 4 caractéres')
-            .required(message.required('Titulo da questão')),
-          question_type: Yup.string()
-            .required(message.required('Tipo da questão')),
-          question_answer: Yup.string()
-        })
-      )
-      .required('É obritório ter questões')
-      .min(1, 'Deve ter no mínimo 1 questão'),
-  });
+const schema = Yup.object().shape({
+  quiz_title: Yup.string()
+    .min(3, 'Deve possuir no mínimo 3 caractéres')
+    .required(message.required('Titulo do fomulário')),
+  questions: Yup.array()
+    .of(
+      Yup.object().shape({
+        question_title: Yup.string()
+          .min(4, 'Deve possuir no mínimo 4 caractéres')
+          .required(message.required('Titulo da questão')),
+        question_type: Yup.string()
+          .required(message.required('Tipo da questão')),
+        question_answer: Yup.string()
+      })
+    )
+    .required('É obritório ter questões')
+    .min(1, 'Deve ter no mínimo 1 questão'),
+});
+
+export const BuilderQuiz = () => {
+  const { onCreateQuiz } = useCreateQuiz()
+  const initialValues: BuilderQuizProps = { quiz_title: '', questions: [{ question_title: '', question_type: 'Texto', question_answer: '' }] }
 
   return (
     <>
@@ -34,7 +38,7 @@ export const BuilderQuiz = ({ onSubmit, initialValues }: { onSubmit(params: Buil
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
-          onSubmit={onSubmit}
+          onSubmit={onCreateQuiz}
         >
           {({ values }: any) => (
             <Form>
