@@ -6,7 +6,7 @@
   "author": "Joziel",
   "license": "MIT",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "dev": "tsc && react-scripts start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
