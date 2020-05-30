@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { client } from "services";
 
 import "assets/vendor/nucleo/css/nucleo.css";
 import "assets/vendor/font-awesome/css/font-awesome.min.css";
@@ -14,12 +14,10 @@ import Landing from "views/examples/Landing.js";
 import Login from "views/examples/Login.js";
 import Profile from "views/examples/Profile.js";
 import Register from "views/examples/Register.js";
-import Form from "pages/form";
-import BuildForm from "pages/buildForm";
-
-const client = new ApolloClient({
-  uri: "http://localhost:1337/graphql",
-});
+import Quiz from "pages/Quiz/quiz";
+import Quizzes from "pages/Quiz/list";
+import CreateQuiz from "pages/Quiz/create";
+import UpdateQuiz from "pages/Quiz/update";
 
 const App = () => (
   <ApolloProvider client={client}>
@@ -47,14 +45,22 @@ const App = () => (
           render={(props: any) => <Register {...props} />}
         />
         <Route
-          path="/form"
-          exact
-          render={(props: any) => <Form {...props} />}
+          path="/quiz"
+          exact={true}
+          render={(props: any) => <Quizzes {...props} />}
         />
         <Route
-          path="/build"
+          path="/quiz/:id"
+          render={(props: any) => <Quiz {...props} />}
+        />
+        <Route
+          path="/create-quiz"
           exact
-          render={(props: any) => <BuildForm {...props} />}
+          render={(props: any) => <CreateQuiz {...props} />}
+        />
+        <Route
+          path="/update-quiz/:id"
+          render={(props: any) => <UpdateQuiz {...props} />}
         />
         <Redirect to="/" />
       </Switch>
