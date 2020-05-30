@@ -19,9 +19,9 @@ export interface QuestionType {
 
 export type QuestionInputService = {
   id?: string;
-  step: string;
+  step?: string;
   name: string;
-  type: any;
+  type: InputTypeKey;
   label: string;
   options?: string;
   description?: string;
@@ -31,6 +31,7 @@ export type QuestionInputService = {
 
 export interface StepType {
   id: string;
+  title: string;
   questions: QuestionInputService[];
 }
 
@@ -46,7 +47,13 @@ export interface QuizType {
   steps: StepType[];
 }
 
+export interface QuizzesType {
+  id: string;
+  title: string;
+  description: string;
+}
 export type BuildQuestionType = {
+  id?: string;
   question_title: string;
   question_type: TypeQuestionKey;
   question_answer: string;
@@ -54,7 +61,7 @@ export type BuildQuestionType = {
 }
 
 export enum TypeQuestion {
-  'Texto' = 'string',
+  'Texto' = 'text',
   'Booleano' = 'boolean',
   'Multipla Escolha' = 'options',
   'Caixa de seleção' = 'checklist',
@@ -73,16 +80,19 @@ export type TypeQuestionKey = keyof typeof TypeQuestion;
 export type InputTypeKey = keyof typeof InputType;
 
 export type BuidQuestionsProps = {
+  id?: string;
   step_id: string;
   questions: BuildQuestionType[]
 }
 
 export type BuildStepType = {
-  question_title: string;
+  id?: string;
+  step_title: string;
   questions: BuildQuestionType[];
 }
 
 export type BuilderQuizProps = {
+  id?: string;
   quiz_title: string;
   steps: BuildStepType[];
 }

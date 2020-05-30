@@ -1,12 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { DemoNavbar, RenderForm } from "components";
+import { RenderForm } from "components";
 import { useGetQuiz } from "services";
 
-// index page sections
-import Hero from "../views/IndexSections/Hero.js";
-
-function FormBuild() {
+export default function QuizPage() {
   const { id } = useParams();
   const { loading, error, data } = useGetQuiz(id);
 
@@ -15,14 +12,8 @@ function FormBuild() {
   if (!data) return <p>Not found</p>
 
   return (
-    <>
-      <DemoNavbar />
-      <main>
-        <Hero />
-        <RenderForm quiz={data.quiz} />} />
-      </main>
-    </>
+    <main>
+      <RenderForm quiz={data.quiz} />
+    </main>
   );
 }
-
-export default FormBuild;

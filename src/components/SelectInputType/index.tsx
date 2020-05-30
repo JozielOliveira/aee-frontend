@@ -2,9 +2,10 @@ import React from 'react';
 
 import { Input } from '..';
 import { Option } from 'components/Input';
+import { TypeQuestionKey } from "types";
 
 export const SelectInputType: React.FC<{
-  type: 'Texto' | 'Booleano' | 'Multipla Escolha' | 'Caixa de seleção' | 'Numero';
+  type: TypeQuestionKey;
   id: string;
   name: string;
   label?: string;
@@ -13,7 +14,6 @@ export const SelectInputType: React.FC<{
   question_id?: number;
   disabled?: boolean;
 }> = ({ type, ...props }) => {
-
   switch (type) {
     case 'Texto':
       return <Input type="text" {...props} />

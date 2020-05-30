@@ -7,7 +7,7 @@ import { Container, Card, CardBody, CardFooter, Button } from "reactstrap";
 import { BuilderQuestions, Input } from "..";
 import { message } from "../constants";
 import { BuilderQuizProps, BuildStepType } from 'types';
-import { useCreateQuiz } from "services";
+import { useCreateQuiz, useUpdateQuiz } from "services";
 
 const schema = Yup.object().shape({
   quiz_title: Yup.string()
@@ -35,18 +35,19 @@ const schema = Yup.object().shape({
       }))
 });
 
-export const BuilderQuiz = () => {
-  const { onCreateQuiz } = useCreateQuiz()
-
+export const BuilderQuiz = ({ quiz, update = false }: { update?: boolean, quiz?: BuilderQuizProps }) => {
   const initialStep: BuildStepType = {
-    question_title: '',
+    step_title: '',
     questions: [{ question_title: '', question_type: 'Texto', question_answer: '' }]
   }
+  const initialValues: BuilderQuizProps = quiz ? { ...quiz } :
+    {
+      quiz_title: '',
+      steps: [initialStep]
+    }
 
-  const initialValues: BuilderQuizProps = {
-    quiz_title: '',
-    steps: [initialStep]
-  }
+  const { onCreateQuiz } = useCreateQuiz()
+  const { onUpdateQuiz } = useUpdateQuiz()
 
   return (
     <>
@@ -54,7 +55,7 @@ export const BuilderQuiz = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
-          onSubmit={onCreateQuiz}
+          onSubmit={update ? onUpdateQuiz : onCreateQuiz}
         >
           {({ values }: any) => (
             <Form>
