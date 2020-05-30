@@ -18,10 +18,13 @@ import Quiz from "pages/Quiz/quiz";
 import Quizzes from "pages/Quiz/list";
 import CreateQuiz from "pages/Quiz/create";
 import UpdateQuiz from "pages/Quiz/update";
+import { Header } from "components";
 
 const App = () => (
   <ApolloProvider client={client}>
     <BrowserRouter>
+      <Header />
+      <div style={{ marginTop: 100 }}></div>
       <Switch>
         <Route path="/" exact render={(props: any) => <Index {...props} />} />
         <Route

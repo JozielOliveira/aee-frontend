@@ -4,7 +4,7 @@ import React from "react";
 import { Container, Row } from "reactstrap";
 
 // core components
-import { DemoNavbar, CardFooter } from "components";
+import { CardFooter } from "components";
 
 // index page sections
 import Hero from "./IndexSections/Hero.js";
@@ -27,57 +27,7 @@ import Carousel from "./IndexSections/Carousel.js";
 import Icons from "./IndexSections/Icons.js";
 import Login from "./IndexSections/Login.js";
 import Download from "./IndexSections/Download.js";
-// import Form from "../components/RenderForm";
 
-// const steps = [
-//   {
-//     id: 1,
-//     title: 'Dados iniciais',
-//     description: '',
-//     questions: [
-//       {
-//         id: 1,
-//         name: 'name',
-//         type: 'text',
-//         label: '',
-//         description: 'Com que idade controlou a urina de dia?',
-//         placeholder: 'Nome...',
-//         defaultValue: 'Joziel',
-//         validations: ['string','email', 'required']
-//       },
-//       {
-//         id: 2,
-//         name: 'last_name',
-//         type: 'text',
-//         label: '',
-//         description: 'Como foi a gestação?',
-//         placeholder: 'Sobrenome...',
-//         defaultValue: ''
-//       }
-//     ]
-//   },
-//   {
-//     id: 2,
-//     title: 'Contato',
-//     description: '',
-//     questions: [
-//       {
-//         id: 1,
-//         name: 'phone',
-//         type: 'text',
-//         label: 'Telefone',
-//         description: '',
-//         placeholder: 'Telefone...',
-//         defaultValue: ''
-//       }
-//     ]
-//   }
-// ]
-
-// const quiz = {
-//   title: 'Anamnese',
-//   steps: steps
-// }
 type MyDocument = typeof document & { scrollingElement: any };
 
 class Index extends React.Component {
@@ -88,10 +38,8 @@ class Index extends React.Component {
   render() {
     return (
       <>
-        <DemoNavbar />
         <main ref="main">
           <Hero />
-          {/* <Form quiz={quiz}/> */}
           <Buttons />
           <Inputs />
           <section className="section">
