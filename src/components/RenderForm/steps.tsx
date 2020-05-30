@@ -4,22 +4,28 @@ import { Row, Col, Button } from "reactstrap";
 import { Form, Input } from "components";
 
 import { getInitialValue, getValidationSchema } from "../utils";
-import { QuestionType } from "types";
+import { QuestionInputService, QuestionType } from "types";
 
 type StepsProps = {
   id: string;
-  questions: QuestionType[];
+  questions: QuestionInputService[];
   onSubmit: (id: string, values?: any) => Promise<any>;
 };
 
 export const Steps = ({ id, questions, onSubmit }: StepsProps) => {
+  const questionsNormalize: QuestionType[] = questions.map(question => ({
+    ...question,
+    defaultValue: question.defaultValue && JSON.parse(question.defaultValue),
+    options: question.options && JSON.parse(question.options)
+  }))
+
   return (
     <Form
-      initialValues={getInitialValue(questions)}
-      validationSchema={getValidationSchema(questions)}
+      initialValues={getInitialValue(questionsNormalize)}
+      validationSchema={getValidationSchema(questionsNormalize)}
       onSubmit={(params: any) => onSubmit(id, params)}
     >
-      {questions.map((question, index) => (
+      {questionsNormalize.map((question, index) => (
         <Row key={index}>
           <Col>
             <Input {...question} />

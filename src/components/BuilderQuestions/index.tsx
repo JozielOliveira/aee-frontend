@@ -21,27 +21,29 @@ const QuestionTypes = [
   },
 ]
 
-export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ questions }) => {
+export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ step_id, questions }) => {
+  const initialQuestion: BuildQuestionType = { question_title: '', question_type: 'Multipla Escolha', question_answer: '', question_options: [{ label: 'teste' }] }
+
   return (
     <FieldArray
-      name="questions"
+      name={`steps[${step_id}].questions`}
       render={arrayHelpers => (
         <>
-          {questions.map((question: BuildQuestionType, index: number) => (
-            <Container key={index} className="mb-5">
+          {questions.map((question: BuildQuestionType, question_id: number) => (
+            <Container key={question_id} className="mb-5">
               <Card className="shadow">
                 <CardBody>
                   <Input
-                    id={`${index}-1`}
-                    name={`questions[${index}].question_title`}
+                    id={`${step_id}-${question_id}-1`}
+                    name={`steps[${step_id}].questions[${question_id}].question_title`}
                     label="Titulo da questão"
                     type="text"
                   />
                   <Row>
                     <Col xl='6'>
                       <Input
-                        id={`${index}-2`}
-                        name={`questions[${index}].question_type`}
+                        id={`${step_id}-${question_id}-2`}
+                        name={`steps[${step_id}].questions[${question_id}].question_type`}
                         label="Tipo da questão"
                         type="options"
                         options={QuestionTypes}
@@ -49,14 +51,19 @@ export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ questions }) =>
                     </Col>
                     <Col xl='6'>
                       <SelectInputType
-                        id={`${index}-3`}
-                        name={`questions[${index}].question_answer`}
-                        type={questions[index].question_type} />
+                        id={`${step_id}-${question_id}-3`}
+                        name={`steps[${step_id}].questions[${question_id}].question_answer`}
+                        label='Gabarito'
+                        type={question.question_type}
+                        step_id={step_id}
+                        question_id={question_id}
+                        options={question.question_options}
+                      />
                     </Col>
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <Button onClick={() => arrayHelpers.push({ ...question })} className="btn-1 ml-1" color="success">
+                  <Button onClick={() => arrayHelpers.push(initialQuestion)} className="btn-1 ml-1" color="success">
                     Adicionar
                   </Button>
                 </CardFooter>

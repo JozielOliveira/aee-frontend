@@ -20,15 +20,18 @@ const TypesInput = {
   text: (props: FieldFormki) => <FieldInput type="text" {...props} />,
   number: (props: FieldFormki) => <FieldInput type="number" {...props} />,
   boolean: (props: FieldFormki) => <FieldBoolean {...props} />,
-  options: (props: FieldOptionsProps) => <FieldOptions {...props} />,
+  options: (props: FieldOptionsProps) => <FieldOptions type="radio" {...props} />,
   // Next version
-  checklist: () => { },
+  checklist: (props: FieldOptionsProps) => <FieldOptions type="checkbox" {...props} />,
   file: () => { },
 };
 
 export type InputProps = QuestionType & {
+  step_id?: string;
+  question_id?: number;
   disabled?: boolean;
   options?: Option[];
+  todoList?: boolean;
 };
 
 export const Label = (props: { value: string }) => (

@@ -1,36 +1,52 @@
 import React from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
-import { Container, Card, CardBody, Button } from "reactstrap";
+import { Container, Card, CardBody, CardFooter, Button } from "reactstrap";
 
 // core components
 import { BuilderQuestions, Input } from "..";
 import { message } from "../constants";
-import { BuilderQuizProps } from 'types';
+import { BuilderQuizProps, BuildStepType } from 'types';
 import { useCreateQuiz } from "services";
 
 const schema = Yup.object().shape({
   quiz_title: Yup.string()
     .min(3, 'Deve possuir no mínimo 3 caractéres')
     .required(message.required('Titulo do fomulário')),
-  questions: Yup.array()
+  steps: Yup.array()
     .of(
       Yup.object().shape({
-        question_title: Yup.string()
+        step_title: Yup.string()
           .min(4, 'Deve possuir no mínimo 4 caractéres')
           .required(message.required('Titulo da questão')),
-        question_type: Yup.string()
-          .required(message.required('Tipo da questão')),
-        question_answer: Yup.string()
-      })
-    )
-    .required('É obritório ter questões')
-    .min(1, 'Deve ter no mínimo 1 questão'),
+        questions: Yup.array()
+          .of(
+            Yup.object().shape({
+              question_title: Yup.string()
+                .min(4, 'Deve possuir no mínimo 4 caractéres')
+                .required(message.required('Titulo da questão')),
+              question_type: Yup.string()
+                .required(message.required('Tipo da questão')),
+              question_answer: Yup.string()
+            })
+          )
+          .required('É obritório ter questões')
+          .min(1, 'Deve ter no mínimo 1 questão'),
+      }))
 });
 
 export const BuilderQuiz = () => {
   const { onCreateQuiz } = useCreateQuiz()
-  const initialValues: BuilderQuizProps = { quiz_title: '', questions: [{ question_title: '', question_type: 'Texto', question_answer: '' }] }
+
+  const initialStep: BuildStepType = {
+    question_title: '',
+    questions: [{ question_title: '', question_type: 'Texto', question_answer: '' }]
+  }
+
+  const initialValues: BuilderQuizProps = {
+    quiz_title: '',
+    steps: [initialStep]
+  }
 
   return (
     <>
@@ -42,6 +58,7 @@ export const BuilderQuiz = () => {
         >
           {({ values }: any) => (
             <Form>
+              {console.log(values)}
               <Container className="mb-5">
                 <Card className="shadow">
                   <CardBody>
@@ -54,7 +71,33 @@ export const BuilderQuiz = () => {
                   </CardBody>
                 </Card>
               </Container>
-              <BuilderQuestions questions={values.questions} />
+              <FieldArray
+                name="steps"
+                render={arrayHelpers => (
+                  <>
+                    {values.steps.map((step: BuildStepType, index: string) => (
+                      <Container key={index} className="mb-5">
+                        <Card className="shadow">
+                          <CardBody>
+                            <Input
+                              id={`${index}-1`}
+                              name={`steps[${index}].step_title`}
+                              label="Titulo da Etapa"
+                              type="text"
+                            />
+                            <BuilderQuestions step_id={index} questions={values.steps[index].questions} />
+                          </CardBody>
+                          <CardFooter>
+                            <Button onClick={() => arrayHelpers.push(initialStep)} className="btn-1 ml-1" color="success">
+                              Adicionar
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </Container>
+                    ))}
+                  </>
+                )}
+              />
               <Button type="submit">Enviar</Button>
             </Form>
           )}

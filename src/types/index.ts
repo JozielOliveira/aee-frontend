@@ -1,9 +1,11 @@
+import { Option } from "components";
+
 export type ValidationType = {
   value: "required" | "email";
 };
 
 export interface QuestionType {
-  id: string;
+  id?: string;
   name: string;
   type: InputTypeKey;
   label?: string;
@@ -11,12 +13,25 @@ export interface QuestionType {
   description?: string;
   defaultValue?: string;
   validations?: ValidationType[];
+  options?: Option[];
   value?: any;
+}
+
+export type QuestionInputService = {
+  id?: string;
+  step: string;
+  name: string;
+  type: any;
+  label: string;
+  options?: string;
+  description?: string;
+  placeholder?: string;
+  defaultValue?: string;
 }
 
 export interface StepType {
   id: string;
-  questions: QuestionType[];
+  questions: QuestionInputService[];
 }
 
 export interface StepResponseType {
@@ -35,6 +50,7 @@ export type BuildQuestionType = {
   question_title: string;
   question_type: TypeQuestionKey;
   question_answer: string;
+  question_options?: Option[];
 }
 
 export enum TypeQuestion {
@@ -57,10 +73,16 @@ export type TypeQuestionKey = keyof typeof TypeQuestion;
 export type InputTypeKey = keyof typeof InputType;
 
 export type BuidQuestionsProps = {
+  step_id: string;
   questions: BuildQuestionType[]
+}
+
+export type BuildStepType = {
+  question_title: string;
+  questions: BuildQuestionType[];
 }
 
 export type BuilderQuizProps = {
   quiz_title: string;
-  questions: BuildQuestionType[];
+  steps: BuildStepType[];
 }
