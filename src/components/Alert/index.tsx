@@ -18,7 +18,7 @@ export const Alert: React.FC = ({ children }) => {
 
   const onAlert = (message: string, type: TypeAlertKey) => {
     setAlert({ message, type: TypeAlert[type] })
-    // setTimeout(() => setAlert(null), 5000)
+    setTimeout(() => setAlert(null), 5000)
   }
 
   const IconAlert = (type: any) => {
