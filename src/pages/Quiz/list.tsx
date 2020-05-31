@@ -3,11 +3,28 @@ import { Container, Card, CardBody, CardFooter, Button } from "reactstrap";
 
 import { useGetQuizzes, useDeleteQuiz } from "services";
 import { useHistory } from "react-router";
+import { useModal, useAlert } from "components";
 
 export default function ListQuizPage() {
   const { push } = useHistory()
   const { loading, error, data } = useGetQuizzes();
   const [deleteQuiz, { data: deletado }] = useDeleteQuiz();
+  const { onOpenModal } = useModal()
+  const { onAlert } = useAlert()
+
+  const handleDelete = (id: string, title: string) => {
+    onOpenModal({
+      title: `Excluir ${title}`,
+      description: 'Deseja realmente excluir este quiz?',
+      icon: 'warning',
+      confirmText: 'Excluir',
+      cancelText: 'Cancelar',
+      onConfirm: () => {
+        deleteQuiz({ variables: { id } })
+        onAlert(`${title} excluido com sucesso`, 'success')
+      }
+    })
+  }
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -32,7 +49,7 @@ export default function ListQuizPage() {
               <Button onClick={() => push(`/update-quiz/${quiz.id}`)} className="btn-1 ml-1" color="info">
                 Editar
                 </Button>
-              <Button onClick={() => deleteQuiz({ variables: { id: quiz.id } })} className="btn-1 ml-1" color="danger">
+              <Button onClick={() => handleDelete(quiz.id, quiz.title)} className="btn-1 ml-1" color="danger">
                 Excluir
                 </Button>
             </CardFooter>
