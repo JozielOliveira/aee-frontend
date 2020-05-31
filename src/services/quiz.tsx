@@ -6,6 +6,7 @@ import { BuilderQuizProps, TypeQuestion, QuizType, QuizzesType, QuestionInputSer
 import { useAlert } from "components";
 
 type StepInput = {
+  position?: number;
   quiz?: string;
   title: string;
   description?: string;
@@ -26,10 +27,11 @@ const QUIZ = gql`
     quiz(id: $id) {
       id
       title
-      steps {
+      steps (sort: "position") {
         id
         title
-        questions {
+        position
+        questions (sort: "position") {
           id
           name
           type
@@ -156,6 +158,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
       let type: InputTypeKey = TypeQuestion[question.question_type]
 
       let questionNormalise = {
+        position: question.position,
         name: question.question_title.replace(/ /gi, '_'),
         label: question.question_title,
         type: type,
@@ -193,6 +196,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
           variables: {
             id: step.id,
             step: {
+              position: step.position,
               title: step.step_title,
             }
           }
@@ -204,6 +208,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
           variables: {
             step: {
               title: step.step_title,
+              position: step.position,
               quiz: quiz_id
             }
           }

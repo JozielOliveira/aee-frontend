@@ -14,8 +14,9 @@ export interface RenderFormProps {
 
 export const RenderForm = ({ quiz }: RenderFormProps) => {
   const [step, setStep] = useState(1);
+  const steps = quiz.steps.filter(step => step.questions.length > 0)
 
-  const quantSteps = () => step * (100 / quiz.steps.length);
+  const quantSteps = () => step * (100 / steps.length);
 
   const handleSubmit = async (step_id: string, params: any) => {
     const response = await submitStep({
@@ -24,7 +25,7 @@ export const RenderForm = ({ quiz }: RenderFormProps) => {
       response: params,
     });
 
-    // if (quiz.steps.length === step)
+    // if (steps.length === step)
     //   const response = await submitForm()
 
     console.log(response.data);
@@ -35,11 +36,11 @@ export const RenderForm = ({ quiz }: RenderFormProps) => {
   return (
     <Container className="mb-5">
       <Title value={quiz.title} />
-      {quiz.steps.length === 0 && <ProgressBar value={quantSteps()} />}
+      {steps.length === 0 && <ProgressBar value={quantSteps()} />}
       <Card className="shadow">
         <CardBody>
-          {quiz.steps[step - 1] && (
-            <Steps onSubmit={handleSubmit} {...quiz.steps[step - 1]} />
+          {steps[step - 1] && (
+            <Steps onSubmit={handleSubmit} {...steps[step - 1]} />
           )}
         </CardBody>
       </Card>

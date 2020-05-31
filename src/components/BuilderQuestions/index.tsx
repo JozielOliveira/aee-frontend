@@ -22,7 +22,7 @@ const QuestionTypes = [
 ]
 
 export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ step_id, questions }) => {
-  const initialQuestion: BuildQuestionType = { question_title: '', question_type: 'Multipla Escolha', question_answer: '', question_options: [{ label: 'teste' }] }
+  const initialQuestion: BuildQuestionType = { position: 0, question_title: '', question_type: 'Multipla Escolha', question_answer: '', question_options: [{ label: 'teste' }] }
 
   return (
     <FieldArray
@@ -33,12 +33,24 @@ export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ step_id, questi
             <Container key={question_id} className="mb-5">
               <Card className="shadow">
                 <CardBody>
-                  <Input
-                    id={`${step_id}-${question_id}-1`}
-                    name={`steps[${step_id}].questions[${question_id}].question_title`}
-                    label="Titulo da questão"
-                    type="text"
-                  />
+                  <Row>
+                    <Col xl='10'>
+                      <Input
+                        id={`${step_id}-${question_id}-1`}
+                        name={`steps[${step_id}].questions[${question_id}].question_title`}
+                        label="Titulo da questão"
+                        type="text"
+                      />
+                    </Col>
+                    <Col xl='2'>
+                      <Input
+                        id={`${step_id}-${question_id}-2`}
+                        name={`steps[${step_id}].questions[${question_id}].position`}
+                        label="Posição"
+                        type="number"
+                      />
+                    </Col>
+                  </Row>
                   <Row>
                     <Col xl='6'>
                       <Input
@@ -63,7 +75,7 @@ export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ step_id, questi
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <Button onClick={() => arrayHelpers.push(initialQuestion)} className="btn-1 ml-1" color="success">
+                  <Button onClick={() => arrayHelpers.push({ postion: question_id + 1, ...initialQuestion })} className="btn-1 ml-1" color="success">
                     Adicionar Questão
                   </Button>
                 </CardFooter>

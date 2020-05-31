@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
-import { Container, Card, CardBody, CardFooter, Button } from "reactstrap";
+import { Container, Card, CardBody, CardFooter, Button, Row, Col } from "reactstrap";
 
 // core components
 import { BuilderQuestions, Input } from "..";
@@ -19,6 +19,7 @@ const schema = Yup.object().shape({
         step_title: Yup.string()
           .min(4, 'Deve possuir no mínimo 4 caractéres')
           .required(message.required('Titulo da questão')),
+        position: Yup.number().required('Digite a posição da etapa'),
         questions: Yup.array()
           .of(
             Yup.object().shape({
@@ -27,7 +28,8 @@ const schema = Yup.object().shape({
                 .required(message.required('Titulo da questão')),
               question_type: Yup.string()
                 .required(message.required('Tipo da questão')),
-              question_answer: Yup.string()
+              question_answer: Yup.string(),
+              position: Yup.number().required('Digite a posição')
             })
           )
           .required('É obritório ter questões')
@@ -37,8 +39,9 @@ const schema = Yup.object().shape({
 
 export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
   const initialStep: BuildStepType = {
+    position: 0,
     step_title: '',
-    questions: [{ question_title: '', question_type: 'Texto', question_answer: '' }]
+    questions: [{ position: 0, question_title: '', question_type: 'Texto', question_answer: '' }]
   }
   const initialValues: BuilderQuizProps = quiz ? { ...quiz } :
     {
@@ -78,16 +81,28 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                       <Container key={index} className="mb-5">
                         <Card className="shadow">
                           <CardBody>
-                            <Input
-                              id={`${index}-1`}
-                              name={`steps[${index}].step_title`}
-                              label="Titulo da Etapa"
-                              type="text"
-                            />
+                            <Row>
+                              <Col xl='10'>
+                                <Input
+                                  id={`${index}-1`}
+                                  name={`steps[${index}].step_title`}
+                                  label="Titulo da Etapa"
+                                  type="text"
+                                />
+                              </Col>
+                              <Col xl='2'>
+                                <Input
+                                  id={`${index}-2`}
+                                  name={`steps[${index}].position`}
+                                  label="Posição Etapa"
+                                  type="number"
+                                />
+                              </Col>
+                            </Row>
                             <BuilderQuestions step_id={index} questions={values.steps[index].questions} />
                           </CardBody>
                           <CardFooter>
-                            <Button onClick={() => arrayHelpers.push(initialStep)} className="btn-1 ml-1" color="success">
+                            <Button onClick={() => arrayHelpers.push({ position: index + 1, ...initialStep })} className="btn-1 ml-1" color="success">
                               Adicionar Etapa
                             </Button>
                           </CardFooter>

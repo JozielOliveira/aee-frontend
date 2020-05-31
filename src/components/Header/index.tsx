@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import {
   UncontrolledCollapse,
@@ -18,6 +18,7 @@ import {
 } from 'reactstrap'
 
 export const Header = () => {
+  const { push } = useHistory();
   return (
     <Navbar className="navbar-dark bg-default fixed-top" expand="lg">
       <Container>
@@ -48,14 +49,14 @@ export const Header = () => {
           </div>
           <Nav className="ml-lg-auto" navbar>
             <NavItem>
-              <Link to="/quiz" component={NavLink}>
+              <NavLink onClick={() => push("/quiz")}>
                 Quiz <span className="sr-only">(current)</span>
-              </Link>
+              </NavLink>
             </NavItem>
             <NavItem>
-              <Link to="/create-quiz" component={NavLink}>
+              <NavLink onClick={() => push("/create-quiz")}>
                 Criar Quiz
-              </Link>
+              </NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav>Settings</DropdownToggle>

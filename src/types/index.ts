@@ -6,6 +6,7 @@ export type ValidationType = {
 
 export interface QuestionType {
   id?: string;
+  position?: number;
   name: string;
   type: InputTypeKey;
   label?: string;
@@ -19,6 +20,7 @@ export interface QuestionType {
 
 export type QuestionInputService = {
   id?: string;
+  position?: number;
   step?: string;
   name: string;
   type: InputTypeKey;
@@ -32,6 +34,7 @@ export type QuestionInputService = {
 export interface StepType {
   id: string;
   title: string;
+  position: number;
   questions: QuestionInputService[];
 }
 
@@ -54,6 +57,7 @@ export interface QuizzesType {
 }
 export type BuildQuestionType = {
   id?: string;
+  position: number;
   question_title: string;
   question_type: TypeQuestionKey;
   question_answer: string;
@@ -87,6 +91,7 @@ export type BuidQuestionsProps = {
 
 export type BuildStepType = {
   id?: string;
+  position: number;
   step_title: string;
   questions: BuildQuestionType[];
 }
