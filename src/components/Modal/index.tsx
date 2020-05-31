@@ -31,11 +31,11 @@ const initialModal = {
   icon: undefined,
   confirmText: 'OK',
   cancelText: 'Fechar',
-  onConfirm: Function
+  onConfirm: () => { }
 }
 
 const ModalContext = React.createContext({
-  onOpenModal: (params: ModalState) => { }
+  onOpenModal: (options: ModalState) => { }
 })
 
 export const ModalProvider: React.FC = ({ children }) => {
@@ -56,25 +56,8 @@ export const ModalProvider: React.FC = ({ children }) => {
     }
   }
 
-  const onOpenModal = ({
-    title,
-    description,
-    subDescription,
-    icon,
-    confirmText,
-    cancelText,
-    onConfirm
-  }: ModalState) => {
-    setModal({
-      open: true,
-      title,
-      description,
-      subDescription,
-      icon,
-      confirmText,
-      cancelText,
-      onConfirm
-    })
+  const onOpenModal = (options: ModalState) => {
+    setModal({ open: true, ...options })
   }
 
   const onModalClose = () => setModal(initialModal)

@@ -88,7 +88,7 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                           </CardBody>
                           <CardFooter>
                             <Button onClick={() => arrayHelpers.push(initialStep)} className="btn-1 ml-1" color="success">
-                              Adicionar
+                              Adicionar Etapa
                             </Button>
                           </CardFooter>
                         </Card>
@@ -97,7 +97,9 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                   </>
                 )}
               />
-              <Button type="submit">Enviar</Button>
+              <Container className="mb-5">
+                <Button color="success" type="submit">Salvar Quiz</Button>
+              </Container>
             </Form>
           )}
         </Formik>
