@@ -156,7 +156,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
       let type: InputTypeKey = TypeQuestion[question.question_type]
 
       let questionNormalise = {
-        name: question.question_title.replace(' ', ''),
+        name: question.question_title.replace(/ /gi, '_'),
         label: question.question_title,
         type: type,
         defaultValue: JSON.stringify(question.question_answer),
