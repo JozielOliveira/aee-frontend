@@ -1,3 +1,4 @@
+export * from "./Alert";
 export * from "./BuilderQuestions";
 export * from "./BuilderQuiz";
 export * from "./Input";

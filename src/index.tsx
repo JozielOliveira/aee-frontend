@@ -18,56 +18,58 @@ import Quiz from "pages/Quiz/quiz";
 import Quizzes from "pages/Quiz/list";
 import CreateQuiz from "pages/Quiz/create";
 import UpdateQuiz from "pages/Quiz/update";
-import { Header } from "components";
+import { Header, Alert } from "components";
 
 const App = () => (
   <ApolloProvider client={client}>
-    <BrowserRouter>
-      <Header />
-      <div style={{ marginTop: 100 }}></div>
-      <Switch>
-        <Route path="/" exact render={(props: any) => <Index {...props} />} />
-        <Route
-          path="/landing-page"
-          exact
-          render={(props: any) => <Landing {...props} />}
-        />
-        <Route
-          path="/login-page"
-          exact
-          render={(props: any) => <Login {...props} />}
-        />
-        <Route
-          path="/profile-page"
-          exact
-          render={(props: any) => <Profile {...props} />}
-        />
-        <Route
-          path="/register-page"
-          exact
-          render={(props: any) => <Register {...props} />}
-        />
-        <Route
-          path="/quiz"
-          exact={true}
-          render={(props: any) => <Quizzes {...props} />}
-        />
-        <Route
-          path="/quiz/:id"
-          render={(props: any) => <Quiz {...props} />}
-        />
-        <Route
-          path="/create-quiz"
-          exact
-          render={(props: any) => <CreateQuiz {...props} />}
-        />
-        <Route
-          path="/update-quiz/:id"
-          render={(props: any) => <UpdateQuiz {...props} />}
-        />
-        <Redirect to="/" />
-      </Switch>
-    </BrowserRouter>
+    <Alert>
+      <BrowserRouter>
+        <Header />
+        <div style={{ marginTop: 100 }}></div>
+        <Switch>
+          <Route path="/" exact render={(props: any) => <Index {...props} />} />
+          <Route
+            path="/landing-page"
+            exact
+            render={(props: any) => <Landing {...props} />}
+          />
+          <Route
+            path="/login-page"
+            exact
+            render={(props: any) => <Login {...props} />}
+          />
+          <Route
+            path="/profile-page"
+            exact
+            render={(props: any) => <Profile {...props} />}
+          />
+          <Route
+            path="/register-page"
+            exact
+            render={(props: any) => <Register {...props} />}
+          />
+          <Route
+            path="/quiz"
+            exact={true}
+            render={(props: any) => <Quizzes {...props} />}
+          />
+          <Route
+            path="/quiz/:id"
+            render={(props: any) => <Quiz {...props} />}
+          />
+          <Route
+            path="/create-quiz"
+            exact
+            render={(props: any) => <CreateQuiz {...props} />}
+          />
+          <Route
+            path="/update-quiz/:id"
+            render={(props: any) => <UpdateQuiz {...props} />}
+          />
+          <Redirect to="/" />
+        </Switch>
+      </BrowserRouter>
+    </Alert>
   </ApolloProvider>
 );
 
