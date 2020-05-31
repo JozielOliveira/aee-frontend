@@ -102,7 +102,7 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                             <BuilderQuestions step_id={index} questions={values.steps[index].questions} />
                           </CardBody>
                           <CardFooter>
-                            <Button onClick={() => arrayHelpers.push({ position: index + 1, ...initialStep })} className="btn-1 ml-1" color="success">
+                            <Button onClick={() => arrayHelpers.push({ ...initialStep, position: index + 1 })} className="btn-1 ml-1" color="success">
                               Adicionar Etapa
                             </Button>
                           </CardFooter>

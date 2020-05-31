@@ -75,7 +75,7 @@ export const BuilderQuestions: React.FC<BuidQuestionsProps> = ({ step_id, questi
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <Button onClick={() => arrayHelpers.push({ postion: question_id + 1, ...initialQuestion })} className="btn-1 ml-1" color="success">
+                  <Button onClick={() => arrayHelpers.push({ ...initialQuestion, postion: question_id + 1 })} className="btn-1 ml-1" color="success">
                     Adicionar Questão
                   </Button>
                 </CardFooter>
