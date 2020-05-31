@@ -7,7 +7,7 @@ import { Container, Card, CardBody, CardFooter, Button } from "reactstrap";
 import { BuilderQuestions, Input } from "..";
 import { message } from "../constants";
 import { BuilderQuizProps, BuildStepType } from 'types';
-import { useCreateQuiz, useUpdateQuiz } from "services";
+import { useSaveQuiz } from "services";
 
 const schema = Yup.object().shape({
   quiz_title: Yup.string()
@@ -35,7 +35,7 @@ const schema = Yup.object().shape({
       }))
 });
 
-export const BuilderQuiz = ({ quiz, update = false }: { update?: boolean, quiz?: BuilderQuizProps }) => {
+export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
   const initialStep: BuildStepType = {
     step_title: '',
     questions: [{ question_title: '', question_type: 'Texto', question_answer: '' }]
@@ -46,8 +46,7 @@ export const BuilderQuiz = ({ quiz, update = false }: { update?: boolean, quiz?:
       steps: [initialStep]
     }
 
-  const { onCreateQuiz } = useCreateQuiz()
-  const { onUpdateQuiz } = useUpdateQuiz()
+  const { onSaveQuiz } = useSaveQuiz()
 
   return (
     <>
@@ -55,11 +54,10 @@ export const BuilderQuiz = ({ quiz, update = false }: { update?: boolean, quiz?:
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
-          onSubmit={update ? onUpdateQuiz : onCreateQuiz}
+          onSubmit={onSaveQuiz}
         >
           {({ values }: any) => (
             <Form>
-              {console.log(values)}
               <Container className="mb-5">
                 <Card className="shadow">
                   <CardBody>

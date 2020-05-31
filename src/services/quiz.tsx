@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
-import { BuilderQuizProps, TypeQuestion, QuizType, QuizzesType, QuestionInputService, InputTypeKey } from "types";
+import { BuilderQuizProps, TypeQuestion, QuizType, QuizzesType, QuestionInputService, InputTypeKey, BuildStepType, BuildQuestionType } from "types";
+import { useAlert } from "components";
 
 type StepInput = {
   quiz?: string;
@@ -137,81 +138,58 @@ const UPDATE_QUESTION = gql`
   }
 `
 
-const ContextCreateQuiz = React.createContext({
-  onCreateQuiz: (quiz: BuilderQuizProps) => { }
+const ContextSaveQuiz = React.createContext({
+  onSaveQuiz: (quiz: BuilderQuizProps) => { }
 })
 
-const ContextUpdateQuiz = React.createContext({
-  onUpdateQuiz: (quiz: BuilderQuizProps) => { }
-})
-
-export const CreateQuiz: React.FC = ({ children }) => {
+export const SaveQuiz: React.FC = ({ children }) => {
+  const { onAlert } = useAlert()
   const [createQuiz] = useMutation<{ createQuiz: { quiz: { id: string } } }, { title: string }>(CREATE_QUIZ);
   const [createStep] = useMutation<{ createStep: { step: { id: string } } }, { step: StepInput }>(CREATE_STEP);
   const [createQuestion] = useMutation<{ createQuestion: { step: { id: string } } }, { question: QuestionInputService }>(CREATE_QUESTION);
+  const [updateQuiz] = useMutation<{ updateQuiz: { quiz: { id: string } } }, { id?: string, title: string, description?: string }>(UPDATE_QUIZ);
+  const [updateStep] = useMutation<{ updateStep: { step: { id: string } } }, { id?: string, step: StepInput }>(UPDATE_STEP);
+  const [updateQuestion] = useMutation<{ updateQuestion: { question: { id: string } } }, { id?: string, question: QuestionInputService }>(UPDATE_QUESTION);
 
-  const onCreateQuiz = async (quiz: BuilderQuizProps) => {
-    const { data } = await createQuiz({ variables: { title: quiz.quiz_title } })
+  const handleSaveQuestion = (questions: BuildQuestionType[], step_id: string) => {
+    questions.forEach(async question => {
+      let type: InputTypeKey = TypeQuestion[question.question_type]
 
-    const quiz_id: string | undefined = data?.createQuiz.quiz.id
+      let questionNormalise = {
+        name: question.question_title.replace(' ', ''),
+        label: question.question_title,
+        type: type,
+        defaultValue: JSON.stringify(question.question_answer),
+        options: JSON.stringify(question.question_options),
+      }
 
-    if (quiz_id) {
-      quiz.steps.forEach(async step => {
-        const { data } = await createStep({
+      if (question.id)
+        await updateQuestion({
           variables: {
-            step: {
-              title: step.step_title,
-              quiz: quiz_id
+            id: question.id,
+            question: questionNormalise
+          }
+        })
+      else
+        await createQuestion({
+          variables: {
+            question: {
+              ...questionNormalise,
+              step: step_id
             }
           }
         })
-        const step_id: string | undefined = data?.createStep.step.id
 
-        step.questions.forEach(async question => {
-          if (step_id) {
-            let type: InputTypeKey = TypeQuestion[question.question_type]
-
-            await createQuestion({
-              variables: {
-                question: {
-                  name: question.question_title.replace(' ', ''),
-                  label: question.question_title,
-                  type: type,
-                  defaultValue: JSON.stringify(question.question_answer),
-                  options: JSON.stringify(question.question_options),
-                  step: step_id
-                }
-              }
-            })
-          }
-        })
-      })
-    }
+    })
   }
 
-  return (
-    <ContextCreateQuiz.Provider value={{ onCreateQuiz }}>
-      {children}
-    </ContextCreateQuiz.Provider>
-  )
-}
+  const handleSaveStep = (steps: BuildStepType[], quiz_id: string) => {
+    steps.forEach(async step => {
+      let response_step: any
+      let step_id: string | undefined
 
-export const UpdateQuiz: React.FC = ({ children }) => {
-  const [updateQuiz] =
-    useMutation<{ updateQuiz: { quiz: { id: string } } }, { id?: string, title: string, description?: string }>(UPDATE_QUIZ);
-  const [updateStep] =
-    useMutation<{ updateStep: { step: { id: string } } }, { id?: string, step: StepInput }>(UPDATE_STEP);
-  const [updateQuestion] =
-    useMutation<{ updateQuestion: { question: { id: string } } }, { id?: string, question: QuestionInputService }>(UPDATE_QUESTION);
-
-  const onUpdateQuiz = async (quiz: BuilderQuizProps) => {
-    const { data } = await updateQuiz({ variables: { id: quiz.id, title: quiz.quiz_title } })
-
-    const quiz_id: string | undefined = data?.updateQuiz.quiz.id
-
-    if (quiz_id) {
-      quiz.steps.forEach(async step => {
-        const { data } = await updateStep({
+      if (step.id) {
+        response_step = await updateStep({
           variables: {
             id: step.id,
             step: {
@@ -219,48 +197,61 @@ export const UpdateQuiz: React.FC = ({ children }) => {
             }
           }
         })
-        const step_id: string | undefined = data?.updateStep.step.id
+        step_id = response_step.data?.updateStep.step.id
 
-        step.questions.forEach(async question => {
-          if (step_id) {
-            let type: InputTypeKey = TypeQuestion[question.question_type]
-
-            await updateQuestion({
-              variables: {
-                id: question.id,
-                question: {
-                  name: question.question_title.replace(' ', ''),
-                  label: question.question_title,
-                  type: type,
-                  defaultValue: JSON.stringify(question.question_answer),
-                  options: JSON.stringify(question.question_options),
-                }
-              }
-            })
+      } else {
+        response_step = await createStep({
+          variables: {
+            step: {
+              title: step.step_title,
+              quiz: quiz_id
+            }
           }
         })
-      })
+        step_id = response_step.data?.createStep.step.id
+      }
+
+      if (step_id) handleSaveQuestion(step.questions, step_id)
+    })
+  }
+
+  const onSaveQuiz = async (quiz: BuilderQuizProps) => {
+    try {
+      let response_quiz: any
+      let quiz_id: string | undefined
+
+      if (quiz.id) {
+        response_quiz = await updateQuiz({ variables: { id: quiz.id, title: quiz.quiz_title } })
+        quiz_id = response_quiz.data?.updateQuiz.quiz.id
+      } else {
+        response_quiz = await createQuiz({ variables: { title: quiz.quiz_title } })
+        quiz_id = response_quiz.data?.createQuiz.quiz.id
+      }
+
+
+      if (quiz_id) handleSaveStep(quiz.steps, quiz_id)
+
+      onAlert('Salvo com sucesso', 'success')
+
+    } catch (error) {
+      console.log(error)
+      onAlert('Erro ao salvar', 'error')
     }
   }
 
   return (
-    <ContextUpdateQuiz.Provider value={{ onUpdateQuiz }}>
+    <ContextSaveQuiz.Provider value={{ onSaveQuiz }}>
       {children}
-    </ContextUpdateQuiz.Provider>
+    </ContextSaveQuiz.Provider>
   )
 }
 
-export const useUpdateQuiz = () => {
-  const context = useContext(ContextUpdateQuiz)
+export const useSaveQuiz = () => {
+  const context = useContext(ContextSaveQuiz)
 
   return context
 }
 
-export const useCreateQuiz = () => {
-  const context = useContext(ContextCreateQuiz)
-
-  return context
-}
 export const useDeleteQuiz = () =>
   useMutation<{ deleteQuiz: { quiz: { id: string } } }, { id: string }>(DELETE_QUIZ);
 

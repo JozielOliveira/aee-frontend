@@ -1,11 +1,11 @@
 import React from "react";
 import { BuilderQuiz } from "components";
-import { CreateQuiz } from "services";
+import { SaveQuiz } from "services";
 
 export default function CreateQuizPage() {
   return (
-    <CreateQuiz>
+    <SaveQuiz>
       <BuilderQuiz />
-    </CreateQuiz>
+    </SaveQuiz>
   );
 }

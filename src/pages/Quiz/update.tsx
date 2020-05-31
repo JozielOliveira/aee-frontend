@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { BuilderQuiz } from "components";
-import { useGetQuiz, UpdateQuiz } from "services";
+import { useGetQuiz, SaveQuiz } from "services";
 import { BuilderQuizProps, InputType, TypeQuestionKey } from "types";
 
 export default function QuizPage() {
@@ -32,8 +32,8 @@ export default function QuizPage() {
   }
 
   return (
-    <UpdateQuiz>
-      <BuilderQuiz update={true} quiz={dataNomalize} />
-    </UpdateQuiz>
+    <SaveQuiz>
+      <BuilderQuiz quiz={dataNomalize} />
+    </SaveQuiz>
   );
 }
