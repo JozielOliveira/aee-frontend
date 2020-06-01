@@ -39,6 +39,7 @@ const QUIZ = gql`
           placeholder
           description
           options
+          position
           validations {
             value
           }
