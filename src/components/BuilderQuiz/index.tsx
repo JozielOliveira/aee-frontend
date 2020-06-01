@@ -3,7 +3,6 @@ import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
 import { Container, Card, CardBody, CardFooter, Button, Row, Col } from "reactstrap";
 
-// core components
 import { BuilderQuestions, Input } from "..";
 import { message } from "../constants";
 import { BuilderQuizProps, BuildStepType } from 'types';
@@ -37,12 +36,13 @@ const schema = Yup.object().shape({
       }))
 });
 
+const initialStep: BuildStepType = {
+  position: 0,
+  step_title: '',
+  questions: [{ position: 0, question_title: '', question_type: 'Texto', question_answer: '' }]
+}
+
 export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
-  const initialStep: BuildStepType = {
-    position: 0,
-    step_title: '',
-    questions: [{ position: 0, question_title: '', question_type: 'Texto', question_answer: '' }]
-  }
   const initialValues: BuilderQuizProps = quiz ? { ...quiz } :
     {
       quiz_title: '',
@@ -64,12 +64,7 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
               <Container className="mb-5">
                 <Card className="shadow">
                   <CardBody>
-                    <Input
-                      id={`quiz_title`}
-                      name={`quiz_title`}
-                      label="Titulo do Fomulário"
-                      type="text"
-                    />
+                    <Input label="Titulo do Fomulário" id='quiz_title' name='quiz_title' type="text" />
                   </CardBody>
                 </Card>
               </Container>
@@ -83,20 +78,10 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                           <CardBody>
                             <Row>
                               <Col xl='10'>
-                                <Input
-                                  id={`${index}-1`}
-                                  name={`steps[${index}].step_title`}
-                                  label="Titulo da Etapa"
-                                  type="text"
-                                />
+                                <Input label="Titulo da Etapa" id={`${index}-1`} name={`steps[${index}].step_title`} type="text" />
                               </Col>
                               <Col xl='2'>
-                                <Input
-                                  id={`${index}-2`}
-                                  name={`steps[${index}].position`}
-                                  label="Posição Etapa"
-                                  type="number"
-                                />
+                                <Input label="Posição Etapa" id={`${index}-2`} name={`steps[${index}].position`} type="number" />
                               </Col>
                             </Row>
                             <BuilderQuestions step_id={index} questions={values.steps[index].questions} />

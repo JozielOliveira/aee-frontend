@@ -2,6 +2,7 @@ export * from "./Alert";
 export * from "./BuilderQuestions";
 export * from "./BuilderQuiz";
 export * from "./Input";
+export * from "./Loader";
 export * from "./Modal"
 export * from "./Footers";
 export * from "./Form";

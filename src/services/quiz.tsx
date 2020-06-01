@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
 import { BuilderQuizProps, TypeQuestion, QuizType, QuizzesType, QuestionInputService, InputTypeKey, BuildStepType, BuildQuestionType } from "types";
-import { useAlert } from "components";
+import { useAlert, useLoader } from "components";
 
 type StepInput = {
   position?: number;
@@ -147,6 +147,7 @@ const ContextSaveQuiz = React.createContext({
 
 export const SaveQuiz: React.FC = ({ children }) => {
   const { onAlert } = useAlert()
+  const { onLoader } = useLoader()
   const [createQuiz] = useMutation<{ createQuiz: { quiz: { id: string } } }, { title: string }>(CREATE_QUIZ);
   const [createStep] = useMutation<{ createStep: { step: { id: string } } }, { step: StepInput }>(CREATE_STEP);
   const [createQuestion] = useMutation<{ createQuestion: { step: { id: string } } }, { question: QuestionInputService }>(CREATE_QUESTION);
@@ -222,6 +223,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
   }
 
   const onSaveQuiz = async (quiz: BuilderQuizProps) => {
+    onLoader(true)
     try {
       let response_quiz: any
       let quiz_id: string | undefined
@@ -243,6 +245,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
       console.log(error)
       onAlert('Erro ao salvar', 'error')
     }
+    onLoader(false)
   }
 
   return (

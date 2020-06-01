@@ -8,6 +8,6 @@ export const ProgressBar = (props: { value: number }) => (
         <span> {props.value} %</span>
       </div>
     </div>
-    <Progress max="100" value={props.value} />
+    <Progress color='success' max="100" value={props.value} />
   </Container>
 );

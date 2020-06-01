@@ -8,11 +8,12 @@ import { QuestionInputService, QuestionType } from "types";
 
 type StepsProps = {
   id: string;
+  title: string;
   questions: QuestionInputService[];
   onSubmit: (id: string, values?: any) => Promise<any>;
 };
 
-export const Steps = ({ id, questions, onSubmit }: StepsProps) => {
+export const Steps = ({ id, title, questions, onSubmit }: StepsProps) => {
   const questionsNormalize: QuestionType[] = questions.map(question => ({
     ...question,
     defaultValue: question.defaultValue && JSON.parse(question.defaultValue),
@@ -25,6 +26,9 @@ export const Steps = ({ id, questions, onSubmit }: StepsProps) => {
       validationSchema={getValidationSchema(questionsNormalize)}
       onSubmit={(params: any) => onSubmit(id, params)}
     >
+      <h3 className="h3 text-muted font-weight-bold text-center">
+        {title}
+      </h3>
       {questionsNormalize.map((question, index) => (
         <Row key={index}>
           <Col>

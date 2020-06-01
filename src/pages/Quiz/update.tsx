@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { BuilderQuiz } from "components";
+import { BuilderQuiz, useLoader } from "components";
 import { useGetQuiz, SaveQuiz } from "services";
 import { BuilderQuizProps, InputType, TypeQuestionKey } from "types";
 
 export default function QuizPage() {
   const { id } = useParams();
+  const { onLoader } = useLoader();
   const { loading, error, data } = useGetQuiz(id);
 
-  if (loading) return <p>Loading...</p>;
+  useEffect(() => {
+    onLoader(loading)
+  }, [loading])
+
   if (error) return <p>Error :(</p>;
   if (!data) return <p>Not found</p>
+
   const dataNomalize: BuilderQuizProps = {
     id: data.quiz.id,
     quiz_title: data.quiz.title,
