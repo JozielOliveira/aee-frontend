@@ -1,6 +1,6 @@
 import React from "react";
 import { FormGroup as FormGroupBase } from "reactstrap";
-import { ErrorMessage } from "formik";
+import { ErrorMessage, useFormContext } from "react-hook-form";
 
 export interface FormGroupProps {
   name: string;
@@ -15,11 +15,13 @@ export const FormGroup = ({
   hasError,
   children,
 }: FormGroupProps) => {
+  const { errors } = useFormContext()
+
   return (
     <FormGroupBase className={hasError && icon ? "has-danger" : undefined}>
       {children}
-      <ErrorMessage name={name}>
-        {(errorMessage) => <p className="text-danger mb-0">{errorMessage}</p>}
+      <ErrorMessage name={name} errors={errors}>
+        {({ message }) => <p className="text-danger mb-0">{message}</p>}
       </ErrorMessage>
     </FormGroupBase>
   );

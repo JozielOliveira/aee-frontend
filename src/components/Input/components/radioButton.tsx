@@ -1,25 +1,21 @@
 import React from "react";
-import { FieldFormki } from "..";
 
 export const RadioButton = ({
   id,
   label,
   className,
-  field: { name, value, onChange, onBlur },
-  ...props
-}: FieldFormki) => {
+  name,
+  register
+}: any) => {
   return (
     <div className="custom-control custom-radio mb-3">
       <input
         name={name}
         id={`${name}-${id}`}
         type="radio"
-        value={id} // could be something else for output?
-        checked={id === value}
-        onChange={onChange}
-        onBlur={onBlur}
+        value={label}
         className="custom-control-input"
-        {...props}
+        ref={register()}
       />
       <label className="custom-control-label" htmlFor={`${name}-${id}`}>{label}</label>
     </div>
