@@ -3,7 +3,6 @@ import React from "react";
 export const RadioButton = ({
   id,
   label,
-  className,
   name,
   register
 }: any) => {

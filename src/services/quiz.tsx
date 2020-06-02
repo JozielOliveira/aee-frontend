@@ -39,6 +39,7 @@ const QUIZ = gql`
           placeholder
           description
           options
+          defaultValue
           position
           validations {
             value
@@ -161,7 +162,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
 
       let questionNormalise = {
         position: question.position,
-        name: question.question_title.replace(/ /gi, '_'),
+        name: question.question_title.replace(/ /i, '_'),
         label: question.question_title,
         type: type,
         defaultValue: JSON.stringify(question.question_answer),
