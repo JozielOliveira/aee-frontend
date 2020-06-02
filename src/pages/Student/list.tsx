@@ -14,7 +14,6 @@ export default function ListQuizPage() {
   const { onAlert } = useAlert()
 
   const handleDelete = (id: string, title: string) => {
-    onLoader(true)
     onOpenModal({
       title: `Excluir ${title}`,
       description: 'Deseja realmente excluir este estudente?',
@@ -22,6 +21,7 @@ export default function ListQuizPage() {
       confirmText: 'Excluir',
       cancelText: 'Cancelar',
       onConfirm: async () => {
+        onLoader(true)
         await deleteStudent({ variables: { id } })
         onLoader(false)
         onAlert(`${title} excluido com sucesso`, 'success')

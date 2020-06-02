@@ -14,7 +14,7 @@ export default function QuizPage() {
   }, [loading])
 
   if (error) return <p>Error :(</p>;
-  if (!data) return <p>Not found</p>
+  if (!data) return null
 
   const dataNomalize: BuilderQuizProps = {
     id: data.quiz.id,

@@ -14,7 +14,6 @@ export default function ListQuizPage() {
   const { onAlert } = useAlert()
 
   const handleDelete = (id: string, title: string) => {
-    onLoader(true)
     onOpenModal({
       title: `Excluir ${title}`,
       description: 'Deseja realmente excluir este quiz?',
@@ -22,6 +21,7 @@ export default function ListQuizPage() {
       confirmText: 'Excluir',
       cancelText: 'Cancelar',
       onConfirm: async () => {
+        onLoader(true)
         await deleteQuiz({ variables: { id } })
         onAlert(`${title} excluido com sucesso`, 'success')
         onLoader(false)
@@ -34,7 +34,7 @@ export default function ListQuizPage() {
   }, [loading])
 
   if (error) return <p>Error :(</p>;
-  if (!data) return <p>Not found</p>
+  if (!data) return null
 
   if (deletado?.deleteQuiz.quiz.id)
     data.quizzes = data.quizzes.filter(quiz => quiz.id !== deletado?.deleteQuiz.quiz.id)
