@@ -20,7 +20,7 @@ export default function QuizPage() {
   }, [data])
 
   if (error) return <p>Error :(</p>;
-  if (!data) return <p>Not found</p>
+  if (!data) return null
 
 
   return (

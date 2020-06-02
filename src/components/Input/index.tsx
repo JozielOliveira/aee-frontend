@@ -1,28 +1,22 @@
 import React from "react";
-import { InputProps as InputPropsReactStrap } from "reactstrap";
-import { Field, FieldProps } from "formik";
+import { useFormContext } from "react-hook-form";
 
 import { QuestionType } from "types";
 import { FieldBoolean, FieldInput, FieldOptions } from "./components";
 
-export type FieldFormki = InputPropsReactStrap & FieldProps;
 
 export type Option = {
   label: string;
   disabled?: boolean;
 };
 
-export type FieldOptionsProps = FieldFormki & {
-  options: Option[];
-};
-
 const TypesInput = {
-  text: (props: FieldFormki) => <FieldInput type="text" {...props} />,
-  number: (props: FieldFormki) => <FieldInput type="number" {...props} />,
-  boolean: (props: FieldFormki) => <FieldBoolean {...props} />,
-  options: (props: FieldOptionsProps) => <FieldOptions type="radio" {...props} />,
+  text: (props: any) => <FieldInput type="text" {...props} />,
+  number: (props: any) => <FieldInput type="number" {...props} />,
+  boolean: (props: any) => <FieldBoolean {...props} />,
+  options: (props: any) => <FieldOptions type="radio" {...props} />,
   // Next version
-  checklist: (props: FieldOptionsProps) => <FieldOptions type="checkbox" {...props} />,
+  checklist: (props: any) => <FieldOptions type="checkbox" {...props} />,
   file: () => { },
 };
 
@@ -32,6 +26,7 @@ export type InputProps = QuestionType & {
   disabled?: boolean;
   options?: Option[];
   todoList?: boolean;
+  [x: string]: any;
 };
 
 export const Label = (props: { value: string }) => (
@@ -45,12 +40,16 @@ export const Description = (props: { value: string }) => (
 );
 
 export const Input = ({ type, label, description, ...props }: InputProps) => {
+  const { errors, register } = useFormContext()
+
+  const hasError = errors[props.name];
+
   const InputCustom = TypesInput[type];
   return (
     <>
       {label && <Label value={label} />}
       {description && <Description value={description} />}
-      <Field component={InputCustom} {...props} />
+      <InputCustom {...props} hasError={hasError} register={register} />
     </>
   );
 };

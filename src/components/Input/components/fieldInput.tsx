@@ -2,18 +2,15 @@ import React from "react";
 import { Input } from "reactstrap";
 
 import { FormGroup } from "./formGroup";
-import { FieldFormki } from "..";
 
-export const FieldInput = ({ field, form, ...props }: FieldFormki) => {
-  const hasError = Boolean(form.errors[field.name]);
-
+export const FieldInput = ({ hasError, register, ...props }: any) => {
   return (
-    <FormGroup hasError={hasError} name={field.name} icon={true}>
+    <FormGroup hasError={hasError} name={props.name} icon={true}>
       <Input
         type="text"
         className={hasError ? "is-invalid" : undefined}
+        innerRef={register}
         {...props}
-        {...field}
       />
     </FormGroup>
   );

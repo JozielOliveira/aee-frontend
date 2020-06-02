@@ -1,12 +1,15 @@
-import React from "react";
-import { Formik, Form, FieldArray } from "formik";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
-import { Container, Card, CardBody, CardFooter, Button, Row, Col } from "reactstrap";
+import { useForm, useFieldArray, FormContext } from "react-hook-form";
 
-import { BuilderQuestions, Input } from "..";
+import { Container, Card, CardBody, Button, Row, Col } from "reactstrap";
+
+import { BuilderQuestions } from "..";
 import { message } from "../constants";
 import { BuilderQuizProps, BuildStepType } from 'types';
 import { useSaveQuiz } from "services";
+
+import { Input } from "components";
 
 const schema = Yup.object().shape({
   quiz_title: Yup.string()
@@ -44,68 +47,87 @@ const initialStep: BuildStepType = {
 
 export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
   const initialValues: BuilderQuizProps = quiz ? { ...quiz } :
-    {
-      quiz_title: '',
-      steps: [initialStep]
+    { quiz_title: '', steps: [] }
+  const methods = useForm({
+    validationSchema: schema,
+    defaultValues: initialValues
+  })
+  const { fields, append } = useFieldArray({ control: methods.control, name: "steps" });
+
+  useEffect(() => {
+    if (quiz) {
+      methods.register({ name: 'id', value: quiz.id })
+      quiz.steps.forEach((step, index_step) => {
+        methods.register({ name: `steps[${index_step}].id`, value: step.id })
+        step.questions.forEach((question, index_question) => {
+          methods.register({ name: `steps[${index_step}].questions[${index_question}].id`, value: question.id })
+        })
+      })
     }
+  }, [quiz])
+  const handleAddStep = () => {
+    append({ ...initialStep, position: fields.length + 1 })
+  };
 
   const { onSaveQuiz } = useSaveQuiz()
 
+  const handleSubmit = (data: any) => {
+    console.log(data)
+    onSaveQuiz(data)
+  }
+
   return (
     <>
-      <main>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={schema}
-          onSubmit={onSaveQuiz}
-        >
-          {({ values }: any) => (
-            <Form>
-              <Container className="mb-5">
-                <Card className="shadow">
-                  <CardBody>
-                    <Input label="Titulo do Fomulário" id='quiz_title' name='quiz_title' type="text" />
-                  </CardBody>
-                </Card>
-              </Container>
-              <FieldArray
-                name="steps"
-                render={arrayHelpers => (
-                  <>
-                    {values.steps.map((step: BuildStepType, index: string) => (
-                      <Container key={index} className="mb-5">
-                        <Card className="shadow">
-                          <CardBody>
-                            <Row>
-                              <Col xl='10'>
-                                <Input label="Titulo da Etapa" id={`${index}-1`} name={`steps[${index}].step_title`} type="text" />
-                              </Col>
-                              <Col xl='2'>
-                                <Input label="Posição Etapa" id={`${index}-2`} name={`steps[${index}].position`} type="number" />
-                              </Col>
-                            </Row>
-                            <BuilderQuestions step_id={index} questions={values.steps[index].questions} />
-                          </CardBody>
-                          <CardFooter>
-                            <Button onClick={() => arrayHelpers.push({ ...initialStep, position: index + 1 })} className="btn-1 ml-1" color="success">
-                              Adicionar Etapa
-                            </Button>
-                          </CardFooter>
-                        </Card>
-                      </Container>
-                    ))}
-                  </>
-                )}
-              />
-              <Container className="mb-5">
-                <Button color="success" type="submit">Salvar Quiz</Button>
-              </Container>
-            </Form>
-          )}
-        </Formik>
-      </main>
+      <FormContext {...methods}>
+        <form onSubmit={methods.handleSubmit(handleSubmit)}>
+          <Container className="mb-5">
+            <Card className="shadow">
+              <CardBody>
+                <Input
+                  label="Titulo do Fomulário"
+                  id='quiz_title'
+                  name='quiz_title'
+                  type="text"
+                />
+              </CardBody>
+            </Card>
+          </Container>
+          <Container className="mb-5">
+            {fields.map((step: any, index: number) => (
+              <Card key={index} className="shadow mb-5">
+                <CardBody>
+                  <Row>
+                    <Col xl='10'>
+                      <Input
+                        label="Titulo da Etapa"
+                        id={`${index}-1`}
+                        name={`steps[${index}].step_title`}
+                        type="text"
+                      />
+                    </Col>
+                    <Col xl='2'>
+                      <Input
+                        label="Posição Etapa"
+                        id={`${index}-2`}
+                        name={`steps[${index}].position`}
+                        type="number"
+                      />
+                    </Col>
+                  </Row>
+                  <BuilderQuestions step_id={index} />
+                </CardBody>
+              </Card>
+            ))}
+          </Container>
+
+          <Container className="mb-5">
+            <Button onClick={handleAddStep} className="btn-1 ml-1" color="info">
+              Adicionar Etapa
+            </Button>
+            <Button color="success" type="submit">Salvar Quiz</Button>
+          </Container>
+        </form>
+      </FormContext>
     </>
   );
 }
-
-

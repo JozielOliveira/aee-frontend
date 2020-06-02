@@ -1,8 +1,7 @@
 import React from "react";
 import { FieldOptions } from "./fieldOptions";
-import { FieldFormki } from "..";
 
-export const FieldBoolean = (props: FieldFormki) => {
+export const FieldBoolean = (props: any) => {
   return (
     <FieldOptions
       {...props}
