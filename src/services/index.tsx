@@ -10,3 +10,4 @@ export const client = new ApolloClient({
 });
 
 export * from "./quiz";
+export * from "./student"
