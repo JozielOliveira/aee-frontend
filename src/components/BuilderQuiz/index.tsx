@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { useForm, useFieldArray, FormContext } from "react-hook-form";
 
@@ -6,10 +6,11 @@ import { Container, Card, CardBody, Button, Row, Col } from "reactstrap";
 
 import { BuilderQuestions } from "..";
 import { message } from "../constants";
-import { BuilderQuizProps, BuildStepType } from 'types';
+import { BuilderQuizProps, BuildStepType, StepType } from 'types';
 import { useSaveQuiz } from "services";
 
 import { Input } from "components";
+import { handleNewValues } from "./utils";
 
 const schema = Yup.object().shape({
   quiz_title: Yup.string()
@@ -72,8 +73,10 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
   const { onSaveQuiz } = useSaveQuiz()
 
   const handleSubmit = (data: any) => {
-    console.log(data)
-    onSaveQuiz(data)
+    if (quiz)
+      onSaveQuiz(handleNewValues(quiz, data))
+    else
+      onSaveQuiz(data)
   }
 
   return (

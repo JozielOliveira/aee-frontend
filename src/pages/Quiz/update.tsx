@@ -32,7 +32,7 @@ export default function QuizPage() {
           question_title: question.label,
           question_type: type,
           question_answer: question.defaultValue && JSON.parse(question.defaultValue),
-          question_options: question.options && JSON.parse(question.options)
+          question_options: question.options && question.options !== "null" ? JSON.parse(question.options) : [{ label: '' }]
         }
       })
     }))

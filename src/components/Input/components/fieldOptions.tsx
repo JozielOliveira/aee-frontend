@@ -10,7 +10,7 @@ export const FieldOptions = ({ step_id = 0, question_id = 0, type, name, todoLis
   const FieldInput: any = type === 'radio' ? RadioButton : CheckBoxButton
   const { errors, control, unregister, setValue, getValues } = useFormContext()
   const nameFields = todoList ? fieldName : 'questoins'
-  const { fields, append } = useFieldArray({
+  const { fields = [{ label: '' }], append } = useFieldArray({
     control,
     name: nameFields
   });
