@@ -7,6 +7,19 @@ import { useAlert, useLoader } from "components";
 export type StudentType = {
   id?: string;
   name: string;
+  date_birth: string;
+  age: string;
+  gender: string;
+  nationality: string;
+  zip_code: string;
+  state: string;
+  city: string;
+  street: string;
+  school: string;
+  school_grade: string;
+  teacher: string;
+  responsible_name: string;
+  responsible_phone_number: string;
 }
 
 const STUDENTS = gql`
@@ -19,10 +32,23 @@ const STUDENTS = gql`
 `;
 
 const STUDENT = gql`
-  query getQuiz($id: ID!){
+  query getStudent($id: ID!){
     student(id: $id) {
       id
       name
+      date_birth
+      age
+      gender
+      nationality
+      zip_code
+      state
+      city
+      street
+      school
+      school_grade
+      teacher
+      responsible_name
+      responsible_phone_number
     }
   }
 `;
@@ -87,9 +113,9 @@ export const SaveStudent: React.FC = ({ children }) => {
       let response_student: any
 
       if (student.id)
-        response_student = await updateStudent({ variables: { id: student.id, student: { name: student.name } } })
+        response_student = await updateStudent({ variables: { id: student.id, student } })
       else
-        response_student = await createStudent({ variables: { student: { name: student.name } } })
+        response_student = await createStudent({ variables: { student } })
 
 
       onAlert('Salvo com sucesso', 'success')

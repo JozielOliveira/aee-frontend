@@ -11,3 +11,4 @@ export * from "./ProgressBar";
 export * from "./Navbars";
 export * from "./RenderForm";
 export * from "./SelectInputType";
+export * from "./Title";

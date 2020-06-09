@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetStudent, SaveStudent } from "services";
 import { StudentForm } from "./form";
-import { useLoader } from "components";
+import { useLoader, Title } from "components";
 
 export default function UpdateStudentPage() {
   const { id } = useParams();
@@ -19,6 +19,7 @@ export default function UpdateStudentPage() {
 
   return (
     <SaveStudent>
+      <Title value="Atualizar Estudante" />
       <StudentForm student={data.student} />
     </SaveStudent>
   )

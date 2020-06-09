@@ -48,19 +48,19 @@ export default function ListQuizPage() {
         <Container key={index} className="mb-5">
           <Card className="shadow">
             <CardBody>
-              <Label value={`${student.id} - ${student.name}`} />
+              <Label value={`${student.name}`} />
               {/* <Description value={student.description} /> */}
             </CardBody>
             <CardFooter>
-              <Button onClick={() => push(`/estudante/${student.id}`)} className="btn-1 ml-1" color="primary">
-                Visualizar
+              <Button onClick={() => push(`/estudante/${student.id}`)} className="btn-1 ml-1" color="success">
+                Atender
                 </Button>
               <Button onClick={() => push(`/update-estudante/${student.id}`)} className="btn-1 ml-1" color="info">
                 Editar
-                </Button>
+              </Button>
               <Button onClick={() => student.id && handleDelete(student.id, student.name)} className="btn-1 ml-1" color="danger">
                 Excluir
-                </Button>
+              </Button>
             </CardFooter>
           </Card>
         </Container>
