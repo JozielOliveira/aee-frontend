@@ -67,6 +67,7 @@ export type BuildQuestionType = {
 export enum TypeQuestion {
   'Texto' = 'text',
   'Booleano' = 'boolean',
+  'Data' = 'date',
   'Multipla Escolha' = 'options',
   'Caixa de seleção' = 'checklist',
   'Numero' = 'number'
@@ -75,6 +76,7 @@ export enum TypeQuestion {
 export enum InputType {
   'text' = 'Texto',
   'boolean' = 'Booleano',
+  'date' = 'Data',
   'options' = 'Multipla Escolha',
   'checklist' = 'Caixa de seleção',
   'number' = 'Numero'

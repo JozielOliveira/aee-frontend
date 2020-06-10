@@ -2,7 +2,7 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 
 import { QuestionType } from "types";
-import { FieldBoolean, FieldInput, FieldOptions } from "./components";
+import { FieldBoolean, FieldInput, FieldOptions, Datepicker } from "./components";
 
 
 export type Option = {
@@ -13,6 +13,7 @@ export type Option = {
 const TypesInput = {
   text: (props: any) => <FieldInput type="text" {...props} />,
   number: (props: any) => <FieldInput type="number" {...props} />,
+  date: (props: any) => <Datepicker {...props} />,
   boolean: (props: any) => <FieldBoolean {...props} />,
   options: (props: any) => <FieldOptions type="radio" {...props} />,
   // Next version
