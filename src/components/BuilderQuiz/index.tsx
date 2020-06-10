@@ -6,7 +6,7 @@ import { Container, Card, CardBody, Button, Row, Col } from "reactstrap";
 
 import { BuilderQuestions } from "..";
 import { message } from "../constants";
-import { BuilderQuizProps, BuildStepType, StepType } from 'types';
+import { BuilderQuizProps, BuildStepType } from 'types';
 import { useSaveQuiz } from "services";
 
 import { Input } from "components";
@@ -65,7 +65,8 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
         })
       })
     }
-  }, [quiz])
+  }, [quiz, methods])
+
   const handleAddStep = () => {
     append({ ...initialStep, position: fields.length + 1 })
   };

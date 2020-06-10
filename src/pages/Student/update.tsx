@@ -12,7 +12,7 @@ export default function UpdateStudentPage() {
 
   useEffect(() => {
     onLoader(loading)
-  }, [loading])
+  }, [loading, onLoader])
 
   if (error) return <p>Error :(</p>;
   if (!data) return null

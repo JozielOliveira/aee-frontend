@@ -17,7 +17,7 @@ export default function QuizPage() {
     onLoader(loading)
 
     return () => onShowNavbar(true)
-  }, [data])
+  }, [data, loading, onShowNavbar, onLoader])
 
   if (error) return <p>Error :(</p>;
   if (!data) return null

@@ -8,6 +8,7 @@ export const deepDiffMapper = function () {
     VALUE_UNCHANGED: 'unchanged',
     map: function (obj1: any, obj2: any) {
       if (this.isFunction(obj1) || this.isFunction(obj2)) {
+        // eslint-disable-next-line
         throw 'Invalid argument. Function given, object expected.';
       }
       if (this.isValue(obj1) || this.isValue(obj2)) {
@@ -30,6 +31,7 @@ export const deepDiffMapper = function () {
 
         diff[key] = this.map(obj1[key], value2);
       }
+      // eslint-disable-next-line
       for (var key in obj2) {
         if (this.isFunction(obj2[key]) || diff[key] !== undefined) {
           continue;

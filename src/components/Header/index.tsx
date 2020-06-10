@@ -3,10 +3,6 @@ import { Link, useHistory } from 'react-router-dom'
 
 import {
   UncontrolledCollapse,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledDropdown,
   Navbar,
   NavItem,
   NavLink,

@@ -71,7 +71,7 @@ const UPDATE_STUDENT = gql`
 `
 
 const ContextSaveStudent = React.createContext({
-  onSaveStudent: (student: any) => { }
+  onSaveStudent: (student: StudentType) => { }
 })
 
 export const SaveStudent: React.FC = ({ children }) => {
@@ -84,16 +84,12 @@ export const SaveStudent: React.FC = ({ children }) => {
   const onSaveStudent = async (student: StudentType) => {
     onLoader(true)
     try {
-      let response_student: any
-
       if (student.id)
-        response_student = await updateStudent({ variables: { id: student.id, student: { name: student.name } } })
+        await updateStudent({ variables: { id: student.id, student: { name: student.name } } })
       else
-        response_student = await createStudent({ variables: { student: { name: student.name } } })
-
+        await createStudent({ variables: { student: { name: student.name } } })
 
       onAlert('Salvo com sucesso', 'success')
-
     } catch (error) {
       console.log(error)
       onAlert('Erro ao salvar', 'error')

@@ -91,8 +91,7 @@ export default function StudentPage() {
     onShowNavbar(false)
 
     return () => onShowNavbar(true)
-  }, [data, loading])
-
+  }, [data, loading, onLoader, onShowNavbar])
 
   if (error) return <p>Error :(</p>;
   if (!data) return null

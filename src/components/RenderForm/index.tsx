@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Card, CardBody } from "reactstrap";
-import { Title } from "./components";
+// import { Title } from "./components";
 import { ProgressBar } from "..";
 import { Steps } from "./steps";
 import { QuizType, StepResponseType } from "../../types";

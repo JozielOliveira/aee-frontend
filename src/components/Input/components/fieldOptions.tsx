@@ -19,7 +19,7 @@ export const FieldOptions = ({ step_id = 0, question_id = 0, type, name, todoLis
     todoList && register({ name: fieldName, value: [] })
 
     return () => unregister(fieldTemp)
-  }, [])
+  }, [todoList, fieldName, register, unregister, fieldTemp])
 
   const add = (label: string) => {
     append({ label })
