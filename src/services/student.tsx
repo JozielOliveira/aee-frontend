@@ -31,6 +31,19 @@ const STUDENTS = gql`
     students(where: { user: $id }){
       id
       name
+      gender
+      date_birth
+      age
+      zip_code
+      nationality
+      state
+      city
+      street
+      school
+      school_grade
+      teacher
+      responsible_name
+      responsible_phone_number
     }
   }
 `;
