@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Card, CardBody } from "reactstrap";
 import { Resume } from "components/RenderForm/resume";
 import { useGetResponseQuiz } from "services";
 import { useParams } from "react-router-dom";
+import { useLoader } from "components";
 
 export default function ResumePage() {
   const { idTest = '0', idStudent = '0' } = useParams();
-  const { data } = useGetResponseQuiz(idTest, idStudent);
+  const { onLoader } = useLoader()
+  const { data, loading } = useGetResponseQuiz(idTest, idStudent);
+
+  useEffect(() => {
+    onLoader(loading)
+  }, [loading, onLoader])
 
   return (
     <Container className="mb-5">

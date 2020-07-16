@@ -129,7 +129,7 @@ const UPDATE_STUDENT = gql`
 
 const FLOW = gql`
   query {
-    flows {
+    flows (sort: "id") {
       name
       description
       quiz {

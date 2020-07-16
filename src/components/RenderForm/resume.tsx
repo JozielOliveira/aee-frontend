@@ -23,24 +23,15 @@ export const Resume = ({ title }: { title: string }) => {
         return (
           <div key={index}>
 
-            <h4 className="h4 text-muted font-weight-bold">{step.title}</h4>
+            <h4 className="h4 text-muted font-weight-bold mt-5 mb-4">{step.title}</h4>
             <div className="ml-4">
               {step.questions.map((question, index) => {
                 return (
                   <div key={index}>
                     <div className="mb-2">
-                      <small className="text-uppercase font-weight-bold">{question.label}</small>
-                      {question.type !== 'text' &&
-                        <>
-                          : <small className="text-lead">{question.defaultValue}</small>
-                        </>
-                      }
+                      <small className="h6 text-uppercase font-weight-bold">{question.label}</small>
+                      {'  '}<small className="h6 text-primary text-lead">{question.defaultValue}</small>
                     </div>
-                    {question.type === 'text' &&
-                      <div className="mb-2">
-                        <small className="text-lead">{question.defaultValue}</small>
-                      </div>
-                    }
                   </div>
                 )
               })}
