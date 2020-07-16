@@ -4,6 +4,7 @@ export * from "./BuilderQuiz";
 export * from "./Input";
 export * from "./Loader";
 export * from "./Modal"
+export * from "./Fab";
 export * from "./Footers";
 export * from "./Form";
 export * from "./Header";

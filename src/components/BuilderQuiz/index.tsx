@@ -11,11 +11,13 @@ import { useSaveQuiz } from "services";
 
 import { Input } from "components";
 import { handleNewValues } from "./utils";
+import { useHistory } from "react-router";
 
 const schema = Yup.object().shape({
   quiz_title: Yup.string()
     .min(3, 'Deve possuir no mínimo 3 caractéres')
     .required(message.required('Titulo do fomulário')),
+  quiz_description: Yup.string(),
   steps: Yup.array()
     .of(
       Yup.object().shape({
@@ -23,6 +25,7 @@ const schema = Yup.object().shape({
           .min(4, 'Deve possuir no mínimo 4 caractéres')
           .required(message.required('Titulo da questão')),
         position: Yup.number().required('Digite a posição da etapa'),
+        description: Yup.string(),
         questions: Yup.array()
           .of(
             Yup.object().shape({
@@ -47,8 +50,20 @@ const initialStep: BuildStepType = {
 }
 
 export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
+  const { push } = useHistory();
   const initialValues: BuilderQuizProps = quiz ? { ...quiz } :
-    { quiz_title: '', steps: [] }
+    {
+      quiz_title: '', quiz_description: '', steps: [{
+        step_title: '',
+        position: 0,
+        questions: [{
+          position: 0,
+          question_title: '',
+          question_type: 'Texto',
+          question_answer: ''
+        }]
+      }]
+    }
   const methods = useForm({
     validationSchema: schema,
     defaultValues: initialValues
@@ -78,6 +93,8 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
       onSaveQuiz(handleNewValues(quiz, data))
     else
       onSaveQuiz(data)
+
+    push('/testes')
   }
 
   return (
@@ -93,12 +110,18 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                   name='quiz_title'
                   type="text"
                 />
+                <Input
+                  label="Descrição da Formulário"
+                  id='quiz_description'
+                  name='quiz_description'
+                  type="text"
+                />
               </CardBody>
             </Card>
           </Container>
-          <Container className="mb-5">
-            {fields.map((step: any, index: number) => (
-              <Card key={index} className="shadow mb-5">
+          {fields.map((step: any, index: number) => (
+            <Container key={index} className="mb-5">
+              <Card className="shadow mb-5">
                 <CardBody>
                   <Row>
                     <Col xl='10'>
@@ -117,12 +140,20 @@ export const BuilderQuiz = ({ quiz }: { quiz?: BuilderQuizProps }) => {
                         type="number"
                       />
                     </Col>
+                    <Col xl='12'>
+                      <Input
+                        label="Descrição da Etapa"
+                        id={`${index}-2`}
+                        name={`steps[${index}].step_description`}
+                        type="text"
+                      />
+                    </Col>
                   </Row>
-                  <BuilderQuestions step_id={index} />
                 </CardBody>
               </Card>
-            ))}
-          </Container>
+              <BuilderQuestions step_id={index} />
+            </Container>
+          ))}
 
           <Container className="mb-5">
             <Button onClick={handleAddStep} className="btn-1 ml-1" color="info">

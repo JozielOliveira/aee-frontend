@@ -2,99 +2,28 @@ import React, { useEffect } from "react";
 import { Navbar, Container, Card, CardBody, CardFooter, Button, Row, Col } from "reactstrap";
 import { useParams, useHistory } from "react-router-dom";
 
-import { useGetStudent } from "services";
+import { useGetStudent, useGetFlow } from "services";
 import { useRouter } from "hooks";
 import { useLoader } from "components";
 
-const flow = [
-  {
-    id: 1,
-    title: 'ANAMNESE',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 2,
-    title: 'CONSCIENCIA FONOLOGICA',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 3,
-    title: 'CONHECIMENTO CÓDIGO ESCRITO',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 4,
-    title: 'ESCRITA',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 5,
-    title: 'LEITURA',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 6,
-    title: 'NOÇÃO ESPAÇO-TEMPORAL',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 7,
-    title: 'CONSCIENCIA FONOLOGICA',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 8,
-    title: 'PERCEPÇÕES',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 9,
-    title: 'RACIOCINIO LOGICO MATEMATICO',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 10,
-    title: 'COORDENAÇÃO MOTORA',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 11,
-    title: 'MEMÓRIA',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 12,
-    title: 'CRIATIVIDADE/ IMAGINAÇÃO',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 13,
-    title: 'OUTRAS OBSERVAÇÕES',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  },
-  {
-    id: 14,
-    title: 'COMPORTAMENTO/ AFETIVO/ EMOCIONAL',
-    description: 'É um recurso caracterizado normalmente de entrevistas sobre a história de vida do paciente/cliente (que podem incluir desenvolvimento de forma geral, histórico de doenças, rotina, dinâmica da família, trabalho, etc).'
-  }
-]
 
 export default function StudentPage() {
   const { id } = useParams();
   const { onLoader } = useLoader();
   const { push } = useHistory()
   const { loading, error, data } = useGetStudent(id);
+  const { loading: loadingFlow, error: errorFlow, data: flow } = useGetFlow();
   const { onShowNavbar } = useRouter()
 
   useEffect(() => {
-    onLoader(loading)
+    onLoader(loading || loadingFlow)
     onShowNavbar(false)
 
     return () => onShowNavbar(true)
-  }, [data, loading, onLoader, onShowNavbar])
+  }, [data, loading, loadingFlow, onLoader, onShowNavbar])
 
-  if (error) return <p>Error :(</p>;
-  if (!data) return null
+  if (error || errorFlow) return <p>Error :(</p>;
+  if (!data || !flow) return null
 
   return (
     <main>
@@ -111,21 +40,29 @@ export default function StudentPage() {
       </h1>
         <Container className="mb-5" >
           <Row>
-            {flow.map((step, index) =>
+            {flow.flows.map((step, index) =>
               <Col key={index} xl={index ? 6 : 12}>
                 <Card className="shadow mb-5">
                   <CardBody>
-                    <Label value={step.title} />
-                    <Description value={step.description} />
+                    <Row>
+                      <Col>
+                        <Label value={step.name} />
+                        <Description value={step.description} />
+                      </Col>
+                      <Col xl="12" style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end'
+                      }}>
+                        <Button onClick={() => push(`/teste/${step.quiz.id}/estudante/${id}`)} className="btn-1 ml-1" color="primary">
+                          Aplicar
+                        </Button>
+                        <Button onClick={() => push(`/estudante/${id}/teste/${step.quiz.id}`)} className="btn-1 ml-1" color="info">
+                          Visualizar
+                        </Button>
+                      </Col>
+                    </Row>
                   </CardBody>
-                  <CardFooter>
-                    <Button onClick={() => push(`/estudante/${step.id}`)} className="btn-1 ml-1" color="primary">
-                      Visualizar
-                  </Button>
-                    <Button onClick={() => push(`/estudante/${step.id}`)} className="btn-1 ml-1" color="info">
-                      Editar
-                  </Button>
-                  </CardFooter>
+
                 </Card>
               </Col>
             )}

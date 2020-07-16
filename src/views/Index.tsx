@@ -7,7 +7,6 @@ import { Container, Row } from "reactstrap";
 import { CardFooter } from "components";
 
 // index page sections
-import Hero from "./IndexSections/Hero.js";
 import Buttons from "./IndexSections/Buttons.js";
 import Inputs from "./IndexSections/Inputs.js";
 import CustomControls from "./IndexSections/CustomControls.js";
@@ -39,7 +38,6 @@ class Index extends React.Component {
     return (
       <>
         <main ref="main">
-          <Hero />
           <Buttons />
           <Inputs />
           <section className="section">

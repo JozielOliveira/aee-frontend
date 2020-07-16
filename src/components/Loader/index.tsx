@@ -4,17 +4,19 @@ import './style.css'
 
 type LoaderProps = {
   onLoader(value: boolean): void
+  loader: boolean;
 }
 
 const LoaderContext = React.createContext<LoaderProps>({
-  onLoader: () => { }
+  onLoader: () => { },
+  loader: false,
 })
 
 export const LoaderProvider: React.FC = ({ children }) => {
   const [loader, onLoader] = useState(false)
 
   return (
-    <LoaderContext.Provider value={{ onLoader }}>
+    <LoaderContext.Provider value={{ onLoader, loader }}>
       {children}
       <Modal
         className="modal-dialog-centered modal-danger"

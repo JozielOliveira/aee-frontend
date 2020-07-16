@@ -8,7 +8,7 @@ import {
   InputGroup
 } from 'reactstrap'
 
-export const Datepicker = () => {
+export const Datepicker = ({ hasError, register, ...props }: any) => {
   return (
     <FormGroup>
       <InputGroup>
@@ -19,9 +19,13 @@ export const Datepicker = () => {
         </InputGroupAddon>
         <ReactDatetime
           inputProps={{
-            placeholder: 'Date Picker Here'
+            ref: register(),
+            // ...(hasError && { className: "is-invalid" }),
+            autocomplete: "off",
+            ...props
           }}
           timeFormat={false}
+
         />
       </InputGroup>
     </FormGroup>

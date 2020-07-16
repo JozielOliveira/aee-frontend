@@ -1,0 +1,18 @@
+.rounded-circle {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+
+  @media (max-width: 400) {
+    bottom: 8px;
+    right: 8px;
+  }
+}
+
+.nav-pills-circle .nav-link-icon i, .nav-pills-circle .nav-link-icon svg {
+  font-size: 40px;
+}
+
+.nav-link i:not(.fa) {
+  top: 10px;
+}

@@ -12,26 +12,27 @@ import {
   Col,
   Row
 } from 'reactstrap'
-import { useRouter } from "hooks";
+import { useRouter, useAdmin } from "hooks";
+import Icon from '../../assets/img/brand/logo_white.png'
+import './styles.css'
 
 export const Header = () => {
   const { push } = useHistory();
   const { routes, brand, showNavbar } = useRouter();
+  const { logged, isAdmin } = useAdmin()
 
   const handleNavigate = (params: { path: string, name: string }) => {
     document.title = params.name
     push(params.path)
   }
 
-  if (showNavbar)
+  if (showNavbar && logged)
     return (
       <>
         <Navbar className="navbar-dark bg-default fixed-top" expand="lg">
           <Container>
             <NavbarBrand onClick={e => e.preventDefault()}>
-              <h4 className="text-white text-uppercase font-weight-bold text-center">
-                {brand}
-              </h4>
+              <img src={Icon}></img>
             </NavbarBrand>
             <button className="navbar-toggler" id="navbar-default">
               <span className="navbar-toggler-icon" />
@@ -55,7 +56,7 @@ export const Header = () => {
                 </Row>
               </div>
               <Nav className="ml-lg-auto" navbar>
-                {routes.filter(route => route.showItem).map((route, index) => (
+                {routes.filter(route => isAdmin ? route.showItem : !route.isAdmin && route.showItem).map((route, index) => (
                   <NavItem key={index} >
                     <NavLink onClick={() => handleNavigate(route)}>
                       {route.name}

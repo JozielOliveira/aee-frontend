@@ -1,34 +1,27 @@
 import React, { useState } from "react";
 import { Container, Card, CardBody } from "reactstrap";
-// import { Title } from "./components";
 import { ProgressBar } from "..";
 import { Steps } from "./steps";
 import { QuizType, StepResponseType } from "../../types";
-
-const submitStep = (params: StepResponseType) => ({ data: params });
-// const submitForm = params => ({ data: params })
+import { Resume } from "./resume";
 
 export interface RenderFormProps {
   quiz: QuizType;
+  onSubmit: (params: StepResponseType) => void;
 }
 
-export const RenderForm = ({ quiz }: RenderFormProps) => {
+export const RenderForm = ({ quiz, onSubmit }: RenderFormProps) => {
   const [step, setStep] = useState(0);
   const steps = quiz.steps.filter(step => step.questions.length > 0)
 
   const quantSteps = (): string => String(step * (100 / steps.length));
 
   const handleSubmit = async (step_id: string, params: any) => {
-    const response = await submitStep({
+    await onSubmit({
       step_id,
       quiz_id: quiz.id,
       response: params,
     });
-
-    // if (steps.length === step)
-    //   const response = await submitForm()
-
-    console.log(response.data);
 
     setStep(step + 1);
   };
@@ -41,7 +34,7 @@ export const RenderForm = ({ quiz }: RenderFormProps) => {
           {steps[step] ? (
             <Steps onSubmit={handleSubmit} {...steps[step]} />
           ) :
-            <h2>Feito</h2>
+            <Resume title="Concluído" />
           }
         </CardBody>
       </Card>

@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { Container, Card, CardBody, CardFooter, Button } from "reactstrap";
+import { Container, Card, CardBody, CardFooter, Button, Col, Row } from "reactstrap";
 
 import { useGetQuizzes, useDeleteQuiz } from "services";
 import { useHistory } from "react-router";
-import { useModal, useAlert, useLoader } from "components";
+import { useModal, useAlert, useLoader, Fab } from "components";
+import { useAdmin } from "hooks";
 
 export default function ListQuizPage() {
   const { push } = useHistory()
@@ -12,6 +13,7 @@ export default function ListQuizPage() {
   const [deleteQuiz, { data: deletado }] = useDeleteQuiz();
   const { onOpenModal } = useModal()
   const { onAlert } = useAlert()
+  const { isAdmin } = useAdmin()
 
   const handleDelete = (id: string, title: string) => {
     onOpenModal({
@@ -23,7 +25,7 @@ export default function ListQuizPage() {
       onConfirm: async () => {
         onLoader(true)
         await deleteQuiz({ variables: { id } })
-        onAlert(`${title} excluido com sucesso`, 'success')
+        onAlert(`${title} excluído com sucesso`, 'success')
         onLoader(false)
       }
     })
@@ -41,30 +43,49 @@ export default function ListQuizPage() {
 
   return (
     <main>
+      <span className="mb-4">_</span>
       <h1 className="h1 text-lead font-weight-bold text-center mb-5">
         Testes
       </h1>
+      {!data.quizzes.length &&
+        <h5 className="h5 text-muted text-center mt-8">
+          Adicione um teste
+        </h5>
+      }
       {data.quizzes.map((quiz, index) =>
         <Container key={index} className="mb-5">
           <Card className="shadow">
             <CardBody>
-              <Label value={`${quiz.id} - ${quiz.title}`} />
-              <Description value={quiz.description} />
+              <Row>
+                <Col xl="6">
+                  <Label value={quiz.title} />
+                  <Description value={quiz.description} />
+                </Col>
+                <Col xl="12" style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end'
+                }}>
+                  <Button onClick={() => push(`/teste/${quiz.id}`)} className="btn-1 ml-1" color="primary">
+                    Visualizar
+                  </Button>
+                  {isAdmin &&
+                    <>
+                      <Button onClick={() => push(`/edit-teste/${quiz.id}`)} className="btn-1 ml-1" color="info">
+                        Editar
+                      </Button>
+                      <Button onClick={() => handleDelete(quiz.id, quiz.title)} className="btn-1 ml-1" color="danger">
+                        Excluir
+                      </Button>
+                    </>
+                  }
+                </Col>
+
+              </Row>
             </CardBody>
-            <CardFooter>
-              <Button onClick={() => push(`/teste/${quiz.id}`)} className="btn-1 ml-1" color="primary">
-                Visualizar
-                </Button>
-              <Button onClick={() => push(`/update-teste/${quiz.id}`)} className="btn-1 ml-1" color="info">
-                Editar
-                </Button>
-              <Button onClick={() => handleDelete(quiz.id, quiz.title)} className="btn-1 ml-1" color="danger">
-                Excluir
-                </Button>
-            </CardFooter>
           </Card>
         </Container>
       )}
+      <Fab route='/add-teste' />
     </main>
   );
 }

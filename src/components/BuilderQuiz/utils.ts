@@ -95,7 +95,12 @@ export const handleNewValues = (initial: BuilderQuizProps | [], values: any): Bu
   const steps = diff.steps.map((step: any, index: number) => {
     if (step.type === "created")
       return step.data
-    else if (compare(step, 'position') || compare(step, 'step_title') || step.questions?.some((question: any) => conditional(question)))
+    else if (
+      compare(step, 'position') ||
+      compare(step, 'step_title') ||
+      compare(step, 'step_description') ||
+      step.questions?.some((question: any) => conditional(question))
+    )
       return {
         ...values.steps[index],
         questions: step.questions.map((question: any, index_question: number) =>
@@ -114,6 +119,7 @@ export const handleNewValues = (initial: BuilderQuizProps | [], values: any): Bu
   const newValues: BuilderQuizProps = {
     id: values.id,
     quiz_title: values.quiz_title,
+    quiz_description: values.quiz_description,
     steps
   }
 

@@ -4,6 +4,7 @@ import { gql } from "apollo-boost";
 
 import { BuilderQuizProps, TypeQuestion, QuizType, QuizzesType, QuestionInputService, InputTypeKey, BuildStepType, BuildQuestionType } from "types";
 import { useAlert, useLoader } from "components";
+import { useAdmin } from "hooks";
 
 type StepInput = {
   position?: number;
@@ -27,9 +28,11 @@ const QUIZ = gql`
     quiz(id: $id) {
       id
       title
+      description
       steps (sort: "position") {
         id
         title
+        description
         position
         questions (sort: "position") {
           id
@@ -50,31 +53,86 @@ const QUIZ = gql`
   }
 `;
 
-const CREATE_QUIZ = gql`
+const QUIZ_STUDENT = gql`
+  query getStudent($id: ID!, $idStudent: ID!){
+    quiz(id: $id) {
+      id
+      title
+      description
+      steps (sort: "position") {
+        id
+        title
+        description
+        position
+        questions (sort: "position") {
+          id
+          name
+          type
+          label
+          placeholder
+          description
+          options
+          defaultValue
+          position
+          validations {
+            value
+          }
+          student_responses (where: {
+            student: $idStudent
+          }) {
+            id
+            response
+          }
+        }
+      }
+    }
+  }
+`;
+
+const ADD_QUIZ = gql`
   mutation createQuiz($title: String!, $description: String) {
     createQuiz(input: { data: { title: $title, description: $description } }) {
       quiz {
         id
+        title
+        description
       }
     }
   }
 `;
 
-const CREATE_STEP = gql`
+const ADD_STEP = gql`
   mutation createStep($step: StepInput!) {
     createStep(input: { data: $step }) {
       step {
         id
+        title
+        description
+        position
+        quiz {
+          id
+        }
       }
     }
   }
 `;
 
-const CREATE_QUESTION = gql`
+const ADD_QUESTION = gql`
   mutation createQuestion($question: QuestionInput!) {
     createQuestion(input: { data: $question }) {
       question {
         id
+        name
+        type
+        label
+        placeholder
+        description
+        options
+        defaultValue
+        position
+        validations {
+          value
+        }
       }
     }
   }
@@ -107,6 +165,8 @@ const UPDATE_QUIZ = gql`
     }) {
       quiz {
         id
+        title
+        description
       }
     }
   }
@@ -122,6 +182,9 @@ const UPDATE_STEP = gql`
     }) {
       step {
         id
+        title
+        description
+        position
       }
     }
   }
@@ -137,24 +200,105 @@ const UPDATE_QUESTION = gql`
     }) {
       question {
         id
+        name
+        type
+        label
+        placeholder
+        description
+        options
+        defaultValue
+        position
+        validations {
+          value
+        }
+      }
+    }
+  }
+`
+
+const RESPONSE_QUESTION = gql`
+  mutation createStudentResponse($studentResponse: StudentResponseInput){
+    createStudentResponse(input: {
+      data: $studentResponse
+    }) {
+      studentResponse {
+        id
+        response
+      }
+    }
+  }
+`
+const UPDATE_RESPONSE_QUESTION = gql`
+  mutation updateStudentResponse($id: ID!, $studentResponse: editStudentResponseInput){
+    updateStudentResponse(input: {
+      data: $studentResponse
+      where: {
+        id: $id
+      }
+    }) {
+      studentResponse {
+        id
+        response
       }
     }
   }
 `
 
 const ContextSaveQuiz = React.createContext({
-  onSaveQuiz: (quiz: BuilderQuizProps) => { }
+  onSaveQuiz: (quiz: BuilderQuizProps) => { },
+  onResponseQuestion: (response: any) => { },
 })
 
 export const SaveQuiz: React.FC = ({ children }) => {
   const { onAlert } = useAlert()
   const { onLoader } = useLoader()
-  const [createQuiz] = useMutation<{ createQuiz: { quiz: { id: string } } }, { title: string }>(CREATE_QUIZ);
-  const [createStep] = useMutation<{ createStep: { step: { id: string } } }, { step: StepInput }>(CREATE_STEP);
-  const [createQuestion] = useMutation<{ createQuestion: { step: { id: string } } }, { question: QuestionInputService }>(CREATE_QUESTION);
-  const [updateQuiz] = useMutation<{ updateQuiz: { quiz: { id: string } } }, { id?: string, title: string, description?: string }>(UPDATE_QUIZ);
+  const { user } = useAdmin()
+
+  const [createQuiz] = useMutation<
+    { createQuiz: { quiz: { id: string } } },
+    { creator?: string, title: string, description?: string }
+  >(ADD_QUIZ, {
+    update(cache, { data: { createQuiz } }: any) {
+      const { quizzes }: any = cache.readQuery({ query: QUIZZES });
+      cache.writeQuery({
+        query: QUIZZES,
+        data: { quizzes: quizzes.concat([createQuiz.quiz]) },
+      });
+    }
+  });
+
+  const [createStep] = useMutation<
+    { createStep: { step: { id: string; quiz: { id: string } } } },
+    { step: StepInput }
+  >(ADD_STEP, {
+    update(cache, { data: { createStep: { step: { quiz: { id }, ...step } } } }: any) {
+      const { quiz: quiz_old }: any = cache.readQuery({ query: QUIZ, variables: { id } });
+      console.log({ ...quiz_old, steps: [...quiz_old.steps, { ...step, questions: [] }] })
+
+      cache.writeQuery({
+        query: QUIZ,
+        variables: { id },
+        data: {
+          quiz: {
+            ...quiz_old, steps: [...quiz_old.steps, {
+              id: step.id,
+              description: step.description,
+              position: step.postion,
+              title: step.title,
+              questions: [],
+            }]
+          }
+        },
+      });
+    }
+  });
+
+  const [createQuestion] = useMutation<{ createQuestion: { step: { id: string } } }, { question: QuestionInputService }>(ADD_QUESTION);
+  const [updateQuiz] = useMutation<{ updateQuiz: { quiz: { id: string } } }, { id?: string, creator?: string, title: string, description?: string }>(UPDATE_QUIZ);
   const [updateStep] = useMutation<{ updateStep: { step: { id: string } } }, { id?: string, step: StepInput }>(UPDATE_STEP);
   const [updateQuestion] = useMutation<{ updateQuestion: { question: { id: string } } }, { id?: string, question: QuestionInputService }>(UPDATE_QUESTION);
+  const [responseQuestion] = useMutation<{ studentResponse: { question: { id: string } } }, { studentResponse: { response: string, student: string, question: string } }>(RESPONSE_QUESTION);
+  const [updateResponseQuestion] = useMutation<{ studentResponse: { question: { id: string } } }, { id: string, studentResponse: { response: string, student: string, question: string } }>(UPDATE_RESPONSE_QUESTION);
 
   const handleSaveQuestion = (questions: BuildQuestionType[], step_id: string) => {
     questions.forEach(async question => {
@@ -193,15 +337,17 @@ export const SaveQuiz: React.FC = ({ children }) => {
     steps.forEach(async step => {
       let response_step: any
       let step_id: string | undefined
+      let step_data: StepInput = {
+        position: step.position,
+        title: step.step_title,
+        description: step.step_description
+      }
 
       if (step.id) {
         response_step = await updateStep({
           variables: {
             id: step.id,
-            step: {
-              position: step.position,
-              title: step.step_title,
-            }
+            step: step_data
           }
         })
         step_id = response_step.data?.updateStep.step.id
@@ -210,8 +356,7 @@ export const SaveQuiz: React.FC = ({ children }) => {
         response_step = await createStep({
           variables: {
             step: {
-              title: step.step_title,
-              position: step.position,
+              ...step_data,
               quiz: quiz_id
             }
           }
@@ -228,15 +373,19 @@ export const SaveQuiz: React.FC = ({ children }) => {
     try {
       let response_quiz: any
       let quiz_id: string | undefined
-
-      if (quiz.id) {
-        response_quiz = await updateQuiz({ variables: { id: quiz.id, title: quiz.quiz_title } })
-        quiz_id = response_quiz.data?.updateQuiz.quiz.id
-      } else {
-        response_quiz = await createQuiz({ variables: { title: quiz.quiz_title } })
-        quiz_id = response_quiz.data?.createQuiz.quiz.id
+      let quiz_data = {
+        title: quiz.quiz_title,
+        description: quiz.quiz_description,
+        creator: user?.id
       }
 
+      if (quiz.id) {
+        response_quiz = await updateQuiz({ variables: { ...quiz_data, id: quiz.id } })
+        quiz_id = response_quiz.data?.updateQuiz.quiz.id
+      } else {
+        response_quiz = await createQuiz({ variables: quiz_data })
+        quiz_id = response_quiz.data?.createQuiz.quiz.id
+      }
 
       if (quiz_id) handleSaveStep(quiz.steps, quiz_id)
 
@@ -249,8 +398,23 @@ export const SaveQuiz: React.FC = ({ children }) => {
     onLoader(false)
   }
 
+  const onResponseQuestion = async ({ id, ...params }: any) => {
+    onLoader(true)
+    try {
+      if (id)
+        await updateResponseQuestion({ variables: { id, studentResponse: params } })
+      else
+        await responseQuestion({ variables: { studentResponse: params } })
+
+      onAlert('Salvo com sucesso', 'success')
+    } catch (error) {
+      console.log(error)
+      onAlert('Erro ao salvar', 'error')
+    }
+    onLoader(false)
+  }
   return (
-    <ContextSaveQuiz.Provider value={{ onSaveQuiz }}>
+    <ContextSaveQuiz.Provider value={{ onSaveQuiz, onResponseQuestion }}>
       {children}
     </ContextSaveQuiz.Provider>
   )
@@ -267,6 +431,9 @@ export const useDeleteQuiz = () =>
 
 export const useGetQuiz = (id: string) =>
   useQuery<{ quiz: QuizType }>(QUIZ, { variables: { id } });
+
+export const useGetResponseQuiz = (id: string, idStudent: string) =>
+  useQuery<{ quiz: QuizType }>(QUIZ_STUDENT, { variables: { id, idStudent } });
 
 export const useGetQuizzes = () =>
   useQuery<{ quizzes: QuizzesType[] }>(QUIZZES);

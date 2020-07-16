@@ -14,11 +14,21 @@ type StepsProps = {
 };
 
 export const Steps = ({ id, title, questions, onSubmit }: StepsProps) => {
-  const questionsNormalize: QuestionType[] = questions.map(question => ({
-    ...question,
-    defaultValue: question.defaultValue && JSON.parse(question.defaultValue),
-    options: question.options && JSON.parse(question.options)
-  }))
+  const questionsNormalize: QuestionType[] = questions.map(question => {
+    try {
+      return {
+        ...question,
+        defaultValue: question.defaultValue && JSON.parse(question.defaultValue),
+        options: question.options && JSON.parse(question.options)
+      }
+    } catch (error) {
+      return {
+        ...question,
+        defaultValue: question.defaultValue,
+        options: question.options && JSON.parse(question.options),
+      }
+    }
+  })
 
   return (
     <Form

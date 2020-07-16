@@ -12,6 +12,7 @@ export type Option = {
 
 const TypesInput = {
   text: (props: any) => <FieldInput type="text" {...props} />,
+  password: (props: any) => <FieldInput type="password" {...props} />,
   number: (props: any) => <FieldInput type="number" {...props} />,
   date: (props: any) => <Datepicker {...props} />,
   boolean: (props: any) => <FieldBoolean {...props} />,

@@ -1,18 +1,19 @@
 import React from "react";
-import { SaveStudent } from "services";
-import { StudentForm } from "./form";
-import { Container } from "reactstrap";
 
-export default function CrateStudentPage() {
+import { Container } from "reactstrap";
+import { UserForm } from "./form";
+import { SaveUser } from "services";
+
+export default function Register() {
   return (
-    <SaveStudent>
+    <SaveUser>
       <div className="mb-2">_</div>
       <Container>
         <h2 className="text-uppercase font-weight-bold text-center mb-5">
-          Novo estudante
+          Novo profissional
         </h2>
       </Container>
-      <StudentForm />
-    </SaveStudent>
-  )
+      <UserForm />
+    </SaveUser>
+  );
 }

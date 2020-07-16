@@ -19,10 +19,12 @@ export default function QuizPage() {
   const dataNomalize: BuilderQuizProps = {
     id: data.quiz.id,
     quiz_title: data.quiz.title,
+    quiz_description: data.quiz.description,
     steps: data.quiz.steps.filter(step => step.questions.length > 0).map(step => ({
       id: step.id,
       position: step.position,
       step_title: step.title,
+      step_description: step.description,
       questions: step.questions.map(question => {
         const type: TypeQuestionKey = InputType[question.type]
 
