@@ -21,6 +21,7 @@ const USERS = gql`
       id
       username
       email
+      profession
       role {
         name
       }
@@ -34,6 +35,7 @@ const USER = gql`
       id
       username
       email
+      profession
       role {
         name
       }
@@ -50,6 +52,7 @@ const CREATE_USER = gql`
         id
         username
         email
+        profession
         role {
           name
         }
@@ -84,6 +87,7 @@ const UPDATE_USER = gql`
         id
         username
         email
+        profession
         role {
           name
         }
