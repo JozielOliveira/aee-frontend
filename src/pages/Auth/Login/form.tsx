@@ -46,7 +46,7 @@ export function UserForm({ user = { identifier: '', password: '' } }: { user?: L
           </Button>
         </Col>
         <Col xl={12}>
-          <Link className="text-center btn-block" to='/register'>Não sou cadastro</Link>
+          <Link className="text-center btn-block" to='/register'>Não sou cadastrado</Link>
         </Col>
       </Row>
     </Form>
